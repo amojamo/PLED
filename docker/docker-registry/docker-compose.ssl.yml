@@ -1,0 +1,22 @@
+version: '2'
+services:
+  haproxy:
+    image: m21lab/haproxy:1.6.2
+    links:
+      - letsencrypt
+    volumes_from:
+      - letsencrypt
+
+  letsencrypt:
+    image: m21lab/letsencrypt:1.0
+    environment:
+      DOMAINS: 'YOUR_DOMAIN'
+      EMAIL: 'RECOVERYEMAIL@YOUR_DOMAIN'
+      OPTIONS: '--staging'
+
+  registry:
+    volumes_from:
+      - letsencrypt:ro
+    environment:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/pled.registry.crt
+      REGISTRY_HTTP_TLS_KEY: /certs/pled.registry.key
