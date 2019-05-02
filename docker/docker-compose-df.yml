@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+  mariadb:
+    image: bitnami/mariadb:latest
+    volumes:
+      - mariadb_data:/bitnami
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    volumes:
+      - mongodb_data:/bitnami
+
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis_data:/bitnami
+
+  dreamfactory:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.df
+    #environment:
+    #  - APP_LOG_LEVEL=debug
+    depends_on:
+      - mariadb
+      - mongodb
+      - redis
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - dreamfactory_data:/bitnami
+
+volumes:
+  mariadb_data:
+    external: true
+  mongodb_data:
+    external: true
+  redis_data:
+    external: true
+  dreamfactory_data:
+    external: true

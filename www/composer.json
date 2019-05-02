@@ -1,0 +1,8 @@
+{
+    "require": {
+    "php-opencloud/openstack": "^3.0",
+	"aws/aws-sdk-php": "^3.90.11",
+	"mongodb/mongodb": "^1.0.0" ,
+	"twig/twig": "^2.0"
+    }
+}

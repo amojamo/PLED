@@ -1,0 +1,167 @@
+<form id="formstyle" action="../src/uploadchallenge.php" method="post" enctype="multipart/form-data">
+    <div id="challengeform" class="challengeform">
+        <div class="grid">
+            <div class="first_column">
+                <div class="errmsg">{{ err_challenge_msg }}</div>
+                <br>
+                <!-- CHALLENGE NAME INPUT -->
+                <div type="text">Challenge Name *</div>
+                {% if err_challenge_name %}
+                <fieldset>
+                    <div class="{{ err_challenge_name }}">
+                        <input name="challenge_name" placeholder="Challenge Name" value="{{ challenge_name }}" type="text" tabindex="1" autofocus>
+                    </div>
+                </fieldset>
+                {% else %}
+                <fieldset>
+                    <input name="challenge_name" placeholder="Challenge Name" value="{{ challenge_name }}" type="text" tabindex="1" autofocus>
+                </fieldset>
+                {% endif %}
+
+                <!-- CHALLENGE SUMMARY INPUT -->
+                <div type="text">Challenge Summary</div>
+                <fieldset>
+                    <textarea name="challenge_summary" placeholder="Summary of challenge" tabindex="2">{{ challenge_summary }}</textarea>
+                </fieldset>
+
+                <!-- AUTHOR INPUT -->
+                <div type="text">Author</div>
+                <fieldset>
+                    <input name="challenge_author" placeholder="Challenge Author" value="{{ challenge_author }}" type="text" tabindex="4" autofocus>
+                </fieldset>
+
+                <!-- CREATION DATE INPUT -->
+                <div type="text">Creation Date (dd/mm/yyyy)</div>
+                <fieldset>
+                    <input type="text" name="challenge_creation_date" placeholder="Date of creation" value="{{ challenge_creation_date }}" pattern="([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}" tabindex="5" autofocus>
+                </fieldset>
+
+                <!-- FILE INPUT -->
+                <div type="text">Docker File *</div>
+                {% if err_challenge_file %}
+                    <div class="{{ err_challenge_file }}">
+                        <fieldset>    
+                            <input type="file" name="challenge_fileToUpload" id="fileToUpload" tabindex="12">
+                        </fieldset>
+                    </div>
+                {% else %}
+                    <fieldset>    
+                        <input type="file" name="misc_file_fileToUpload" id="fileToUpload" tabindex="12">
+                    </fieldset>
+                {% endif %}
+
+                <!-- PORT -->
+                <div type="text">Port (digits only)</div>
+                <fieldset>
+                    <input type="text" name="challenge_port" value="{{ challenge_port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
+                </fieldset>
+
+                 <!-- SUBMIT BUTTON -->
+                <fieldset>
+                    <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="13   ">Submit to database</button>
+                </fieldset>
+            </div>
+            <div class="second_column"><br>
+                <!-- TYPE INPUT -->
+                 <div type="text">Type</div>
+                {% if errtype %}
+                <fieldset>
+                    <div class="{{ errtype }}">
+                        <fieldset>
+                            <div class="select">
+                                <select name="challenge_type" id="c_type" class="dropdown" tabindex="3"selected="{{ challenge_type }}">
+                                    <option value="other">---</option>
+                                    <option value="jeopardy">Jeopardy</option>
+                                    <option value="attack-defence">Attack-Defence</option>
+                                    <option value="mixed">Mixed</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                </fieldset>
+                {% else %}
+                <fieldset>
+                    <div class="select">
+                        <select name="challenge_type" id="type" class="dropdown" tabindex="3" selected="{{ challenge_type }}">
+                            <option value="other">---</option>
+                            <option value="jeopardy">Jeopardy</option>
+                            <option value="attack-defence">Attack-Defence</option>
+                            <option value="mixed">Mixed</option>
+                        </select>
+                    </div>
+                </fieldset>
+                {% endif %}
+
+                <!-- CHALLENGE CATEGORY INPUT -->
+                <div type="text">Category</div>
+                <fieldset>
+                    <div class="select">
+                        <select name="challenge_category" id="c_category" class="dropdown" tabindex="6" selected="{{ challenge_category }}">
+                            <option value="other">---</option>
+                            <option value="web">Web</option>
+                            <option value="forensic">Forensic</option>
+                            <option value="crypto">Crypto</option>
+                            <option value="binary">Binary</option>
+                            <option value="stegano">Stegano</option>
+                            <option value="binary_analysis">Binary Analysis</option>
+                            <option value="reverse_engeneering">Reverse Engeneering</option>
+                            <option value="mobile-security">Mobile Security</option>
+                            <option value="pwnable">Pwnable</option>
+                            <option value="miscelaneous">Miscelaneous</option>
+                            <option value="programming">Programming</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <!-- DIFFICULTY LEVEL INPUT -->
+                <div type="text">Difficulty Level</div>
+                <fieldset>
+                    <div class="select">
+                        <select name="challenge_difficulty" id="c_difficulty" class="dropdown" tabindex="7" selected="{{ challenge_difficulty }}">
+                            <option value="other">---</option>
+                            <option value="novice">Novice</option>
+                            <option value="apprentice">Apprentice</option>
+                            <option value="adept">Adept</option>
+                            <option value="expert">Expert</option>
+                            <option value="master">Master</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                 <!-- POINTS -->
+                <div type="text">Points (digits only)</div>
+                <fieldset>
+                    <input type="text" name="challenge_points" value="{{ challenge_points }}" placeholder="Challenge points" tabindex="8" autofocus pattern="\d*">
+                </fieldset>
+
+                <!-- WALKTHROUGH -->
+                <div type="type">Walkthough</div>
+                <fieldset>
+                    <textarea name="challenge_walkthrough" placeholder="Challenge walkthrough" tabindex="9">{{ challenge_walkthrough }}</textarea>
+                </fieldset>
+
+                <!-- FLAG INPUT -->
+                <div type="text">Flag</div>
+                <fieldset>
+                    <input type="text" name="challenge_flag" placeholder="Challenge flag" value="{{ challenge_flag}}" tabindex="10" autofocus>
+                </fieldset>
+            </div>
+
+
+            <!-- HIDDEN FORMTYPE INPUT -->
+            <input type="hidden" name="formtype" value="miscfileform">
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    {% if challenge_type %}
+        $("#c_type").val('{{ challenge_type }}');
+    {% endif %}
+    {% if challenge_category %}
+        $("#c_category").val('{{ challenge_category }}');
+    {% endif %}
+    {% if challenge_difficulty %}
+        $("#c_difficulty").val('{{ challenge_difficulty }}');
+    {% endif %}
+</script>

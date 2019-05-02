@@ -1,0 +1,285 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-weight: 100;
+    font-size: 12px;
+    line-height: 25px;
+    color: #777;
+    background: #f2f2f2;
+}
+
+.errmsg {
+    color: red;
+    font-size: 20px;
+}
+
+.errborder {
+    width: 300px;
+    height: 40px;
+    box-shadow: 0 0 5px red;
+}
+
+.container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    max-width: 1000px;
+    width: 100%;
+    margin: 25px auto;
+    position: relative;
+    background: #F9F9F9;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.dropdown {
+    height: 40px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+}
+
+.show-form{
+    display: none;
+}
+
+#formstyle input[type="text"],
+#formstyle textarea,
+#formstyle button[type="submit"] {
+    font: 400 12px/16px "Roboto", Helvetica, Arial, sans-serif;
+}
+
+#formstyle {
+    
+}
+
+#formstyle h3 {
+    display: block;
+    font-size: 30px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+#formstyle h4 {
+    margin: 5px 0 15px;
+    display: block;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+fieldset {
+    border: medium none !important;
+    margin: 0 0 10px;
+    min-width: 100%;
+    padding: 0;
+    width: 100%;
+}
+
+#formstyle input[type="text"],
+#formstyle textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    background: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+}
+
+#formstyle input[type="text"]:hover,
+#formstyle textarea:hover {
+    -webkit-transition: border-color 0.3s ease-in-out;
+    -moz-transition: border-color 0.3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
+    border: 1px solid #aaa;
+}
+
+#formstyle textarea {
+    height: 120px;
+    max-width: 400px;
+    resize: none;
+}
+
+#formstyle input[type="text"] {
+    max-width: 400px;
+    height: 40px;
+}
+
+#formstyle button[type="submit"] {
+    cursor: pointer;
+    max-width: 400px;
+    border: none;
+    background: #4CAF50;
+    color: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+    font-size: 15px;
+    margin-top: 15px;
+    height: 45px;
+}
+
+#formstyle button[type="delete"] {
+    cursor: pointer;
+    max-width: 400px;
+    border: none;
+    background: red;
+    color: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+    font-size: 15px;
+    height: 45px;
+}
+
+#formstyle button[type="submit"]:hover {
+
+}
+
+#formstyle button[type="submit"]:active {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+#formstyle input:focus,
+#formstyle textarea:focus {
+    outline: 0;
+}
+
+/* Grid for form layout */
+.grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.first_column {
+    grid-column: 1/2;
+}
+
+.second_column {
+    grid-column: 2/3;
+}
+
+.displaydbcontent {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 200px;
+    height: auto;
+    display: inline-block;
+    padding-right: 15px;
+    padding-left: 15px;
+    border: 1px solid #efefef;
+    background-color: white;
+}
+
+.search {
+    margin: auto;
+    width: 50%;
+}
+
+#searchbar {
+    min-width: 400px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+#submitbutton {
+    min-width: 75px;
+    border-radius: 25px;
+    display: inline-block;
+}
+
+.test {
+    display: inline-block;
+}
+
+.wrapper {
+    border:1px solid #e6e6e6;
+    display:inline-block;
+    border-radius: 25px;
+    background-color: white; 
+}
+
+form.searchform input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 0;
+  background-color: transparent;
+  float: left;
+  width: 80%;
+}
+
+form.searchform button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  color: grey;
+  font-size: 17px;
+  background-color: transparent;
+  border:0;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.searchform::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.collapsible {
+    color: #777;
+    font-weight: 100;
+    background-color: white;
+    text-align: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 230px;
+    height: auto;
+    display: inline-block;
+    padding-right: 15px;
+    padding-left: 15px;
+    border: 1px solid #efefef;
+    cursor: pointer;
+}
+
+.collapsibleform {
+    color: #777;
+    font-weight: 100;
+    background-color: white;
+    text-align: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 230px;
+    height: auto;
+    display: inline-block;
+    padding-right: 15px;
+    padding-left: 15px;
+    border: 1px solid #efefef;
+    cursor: pointer;
+}
+
+
+
+.content {
+    border: 1px solid #efefef;
+    width: 90%;
+    display: inline-block;
+    height: auto;
+    padding: 15px;
+    margin: auto;
+    margin-bottom: 15px;
+    display: none;
+    overflow: hidden;
+    background-color: white;
+}
+
+.title {
+    font-weight: bold;
+}

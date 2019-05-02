@@ -1,0 +1,366 @@
+<br><br>
+<form class="searchform" action="../src/search.php" method="post" enctype="multipart/form-data" style="margin:auto;max-width:300px">
+	<div class="wrapper">
+	  <input type="text" placeholder="Search.." name="search">
+	  <input type="hidden" name="from" value="search">
+	  <button type="submit"><i class="fa fa-search"></i></button>
+	</div>
+</form><br>
+{% if searchres %}
+<h5>{{ searchres | length }} results for search '{{ query }}'</h5>
+	{% for res in searchres %}
+		{% if res.Upload_Type == "Vulnerable Application" %}
+			<button class="collapsible">
+				<b>Upload Type: </b> {{ res.Upload_Type }}<br>
+				<b>ID:</b> {{ res._id }} <br>
+				<b>Name:</b> {{ res.application_name }}<br>
+				<b>CVE:</b> {{ res.cve }}<br>
+			</button>
+			<div class="content">
+				<b>ID: </b>{{ res._id }}<br>
+
+				{% if res.exploitdb_id %}
+				  	<b>Exploitdb id: </b>
+				  	{{ res.exploitdb_id }}<br>
+				  {% endif %}
+
+			  	<b>Name: </b>{{ res.application_name }}<br>
+
+			  	{% if res.summary %}
+			  		<b>Summary: </b>
+			  		{{ res.summary }}<br>
+			  	{% endif %}
+
+			  	{% if res.type %}
+				  	<b>Type: </b>
+				  	{{ res.type }}<br>
+			  	{% endif %}
+
+			  	{% if res.platform %}
+			  		<b>Platform: </b>
+			  		{{ res.platform }}<br>
+			  	{% endif %}
+
+			  	{% if res.tag %}
+			  		<b>Tag: </b>
+			  		{{ res.tag }}<br>
+			  	{% endif %}
+
+			  	{% if res.cve %}
+			  		<b>CVE: </b>
+			  		{{ res.cve }}<br>
+			  	{% endif %}
+
+			  	{% if res.cve_summary %}
+			  		<b>CVE Summary: </b>
+			  		{{ res.cve_summary }}<br>
+			  	{% endif %}
+
+			  	{% if res.cwe %}
+			  		<b>CWE: </b>
+			  		{{ res.cwe }}<br>
+			  	{% endif %}
+
+			  	{% if res.impact %}
+			  		<b>Impact: </b>
+			  		{{ res.impact | json_encode }}<br>
+			  	{% endif %}
+
+			  	{% if res.vulnerable_configuration %}
+			  		<b>Vulnerable Configuration: </b>
+			  		{{ res.vulnerable_configuration |join(',') }}<br>
+			  	{% endif %}
+
+			  	{% if res.file_path %}
+			  		<b>File Path: </b>
+			  		{{ res.file_path }}<br>
+			  	{% endif %}
+		</div>
+		{% elseif res.Upload_Type == "CTF Challenge" %}
+			<button class="collapsible">
+				<b>Upload Type:</b>{{ res.Upload_Type }} <br>
+				<b>ID:</b> {{ res._id }} <br>
+				<b>Name:</b> {{ res.name }}<br>
+				<b>Type:</b> {{ res.type }}<br>
+			</button>
+			<div class="content">
+				<b>ID: </b>
+				{{ res._id }}<br>
+				<b>Name: </b>
+				{{ res.name }}<br>
+				
+				{% if res.summary %}
+					<b>Summary: </b>
+					{{ res.summary }}<br>
+				{% endif %}
+				{% if res.author %}
+					<b>Author: </b>
+					{{ res.author }}<br>
+				{% endif %}
+				{% if res.creation_date %}
+					<b>Creation Date: </b>
+					{{ res.creation_date }}<br>
+				{% endif %}
+				{% if res.added_date %}
+					<b>Added Date: </b>
+					{{ res.added_date }}<br>
+				{% endif %}
+				{% if ctf_challeneg.port %}
+					<b>Port: </b>
+					{{ res.port }}<br>
+				{% endif %}
+				{% if res.type %}
+					<b>Type: </b>
+					{{ res.type }}<br>
+				{% endif %}
+				{% if res.category %}
+					<b>Category: </b>
+					{{ res.category }}<br>
+				{% endif %}
+				{% if res.difficulty %}
+					<b>Difficulty: </b>
+					{{ res.difficulty }}<br>
+				{% endif %}
+				{% if res.points %}
+					<b>Points: </b>
+					{{ res.points}}<br>
+				{% endif %}
+				{% if res.walkthrough %}
+					<b>Walkthrough: </b>
+					{{ res.walkthrough }}<br>
+				{% endif %}
+				{% if res.flag %}
+					<b>Flag: </b>
+					{{ res.flag }}<br>
+				{% endif %}
+			</div>
+		{% elseif res.Upload_Type == "Malware" %}
+			<button class="collapsible">
+				<b>Upload Type: </b>{{ res.Upload_Type}}<br>
+				<b>ID:</b> {{ res._id }} <br>
+				<b>Name:</b> {{ res.name }}<br>
+				<b>Type:</b> {{ res.type}}<br>
+			</button>
+			<div class="content">
+				<b>ID: </b>
+				{{ res._id }}<br>
+				<b>Name: </b>
+				{{ res.name }}<br>
+				
+				{% if res.summary %}
+					<b>Summary: </b>
+					{{ res.summary }}<br>
+				{% endif %}
+
+				{% if res.platform %}
+					<b>Platform: </b>
+					{{ res.platform }}<br>
+				{% endif %}
+
+				{% if res.type %}
+					<b>Type: </b>
+					{{ res.type }}<br>
+				{% endif %}
+
+				{% if res.date_added %}
+					<b>Date added: </b>
+					{{ res.date_added }}<br>
+				{% endif %}
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+<br><br><h4>Latest insertions into database</h4>
+<br><h6>Vulnerable applications</h6>
+{% if vuln_applications %}
+	{% for application in vuln_applications %}
+		<button class="collapsible">
+			<b>ID:</b> {{ application._id }} <br>
+			<b>Name:</b> {{ application.application_name }}<br>
+			<b>CVE:</b> {{ application.cve }}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>{{ application._id }}<br>
+
+			{% if application.exploitdb_id %}
+			  	<b>Exploitdb id: </b>
+			  	{{ application.exploitdb_id }}<br>
+			  {% endif %}
+
+		  	<b>Name: </b>{{ application.application_name }}<br>
+
+		  	{% if application.summary %}
+		  		<b>Summary: </b>
+		  		{{ application.summary }}<br>
+		  	{% endif %}
+
+		  	{% if application.type %}
+			  	<b>Type: </b>
+			  	{{ application.type }}<br>
+		  	{% endif %}
+
+		  	{% if application.platform %}
+		  		<b>Platform: </b>
+		  		{{ application.platform }}<br>
+		  	{% endif %}
+
+		  	{% if application.tag %}
+		  		<b>Tag: </b>
+		  		{{ application.tag }}<br>
+		  	{% endif %}
+
+		  	{% if application.cve %}
+		  		<b>CVE: </b>
+		  		{{ application.cve }}<br>
+		  	{% endif %}
+
+		  	{% if application.cve_summary %}
+		  		<b>CVE Summary: </b>
+		  		{{ application.cve_summary }}<br>
+		  	{% endif %}
+
+		  	{% if application.cwe %}
+		  		<b>CWE: </b>
+		  		{{ application.cwe }}<br>
+		  	{% endif %}
+
+		  	{% if application.impact %}
+		  		<b>Impact: </b>
+		  		{{ application.impact | json_encode }}<br>
+		  	{% endif %}
+
+		  	{% if application.vulnerable_configuration %}
+		  		<b>Vulnerable Configuration: </b>
+		  		{{ application.vulnerable_configuration |join(',') }}<br>
+		  	{% endif %}
+
+		  	{% if application.file_path %}
+		  		<b>File Path: </b>
+		  		{{ application.file_path }}<br>
+		  	{% endif %}
+
+		  	{% if application.category %}
+		  		<b>Category: </b>
+		  		{{ application.category }}<br>
+		  	{% endif %}
+		</div>
+	{% endfor %}
+	<br><br>
+	
+{% else %}
+	No vulnerable applications currently in database<br>
+{% endif %}
+<br><h6>CTF Challenges</h6>
+{% if ctf_challenges %}
+	{% for ctf_challenge in ctf_challenges %}
+		<button class="collapsible">
+			<b>ID:</b> {{ ctf_challenge._id }} <br>
+			<b>Name:</b> {{ ctf_challenge.name }}<br>
+			<b>Type:</b> {{ ctf_challenge.type }}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>
+			{{ ctf_challenge._id }}<br>
+			<b>Name: </b>
+			{{ ctf_challenge.name }}<br>
+			{% if ctf_challenge.summary %}
+				<b>Summary: </b>
+				{{ ctf_challenge.summary }}<br>
+			{% endif %}
+			{% if ctf_challenge.author %}
+				<b>Author: </b>
+				{{ ctf_challenge.author }}<br>
+			{% endif %}
+			{% if ctf_challenge.creation_date %}
+				<b>Creation Date: </b>
+				{{ ctf_challenge.creation_date }}<br>
+			{% endif %}
+			{% if ctf_challenge.added_date %}
+				<b>Added Date: </b>
+				{{ ctf_challenge.added_date }}<br>
+			{% endif %}
+			{% if ctf_challeneg.port %}
+				<b>Port: </b>
+				{{ ctf_challenge.port }}<br>
+			{% endif %}
+			{% if ctf_challenge.type %}
+				<b>Type: </b>
+				{{ ctf_challenge.type }}<br>
+			{% endif %}
+			{% if ctf_challenge.category %}
+				<b>Category: </b>
+				{{ ctf_challenge.category }}<br>
+			{% endif %}
+			{% if ctf_challenge.difficulty %}
+				<b>Difficulty: </b>
+				{{ ctf_challenge.difficulty }}<br>
+			{% endif %}
+			{% if ctf_challenge.points %}
+				<b>Points: </b>
+				{{ ctf_challenge.points}}<br>
+			{% endif %}
+			{% if ctf_challenge.walkthrough %}
+				<b>Walkthrough: </b>
+				{{ ctf_challenge.walkthrough }}<br>
+			{% endif %}
+			{% if ctf_challenge.flag %}
+				<b>Flag: </b>
+				{{ ctf_challenge.flag }}<br>
+			{% endif %}
+		</div>
+	{% endfor %}
+	<br>
+{% else %}
+	No CTF Challenges currently in database<br>
+{% endif %}
+<br><h6>Malware</h6>
+{% if malware %}
+	{% for mw in malware %}
+		<button class="collapsible">
+			<b>ID:</b> {{ mw._id }} <br>
+			<b>Name:</b> {{ mw.name }}<br>
+			<b>Type:</b> {{ mw.type}}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>
+			{{ mw._id }}<br>
+			<b>Name: </b>
+			{{ mw.name }}<br>
+			{% if mw.summary %}
+				<b>Summary: </b>
+				{{ mw.summary }}<br>
+			{% endif %}
+			{% if mw.platform %}
+				<b>Platform: </b>
+				{{ mw.platform }}<br>
+			{% endif %}
+			{% if mw.type %}
+				<b>Type: </b>
+				{{ mw.type }}<br>
+			{% endif %}
+			{% if mw.date_added %}
+				<b>Date added: </b>
+				{{ mw.date_added }}<br>
+			{% endif %}
+		</div>
+	{% endfor %}
+	<br>
+{% else %}
+	No malware currently in database<br>
+{% endif %}
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>

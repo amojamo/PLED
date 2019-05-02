@@ -1,0 +1,124 @@
+<form id="upload" action="../src/uploaddockerfile.php" method="post" enctype="multipart/form-data">
+    <div class="dockerform">
+        <div class="grid">
+            <div class="first_column">
+                <div class="errmsg">{{ errmsg }}</div>
+                <br>
+                <!-- APPLICATON NAME INPUT -->
+                <div type="text">Docker File Name</div>
+                {% if errname %}
+                <fieldset>
+                    <div class="{{ errname }}">
+                        <input name="docker_file_name" placeholder="Docker File Name" type="text" tabindex="1" autofocus>
+                    </div>
+                </fieldset>
+                {% else %}
+                <fieldset>
+                    <input name="docker_file_name" placeholder="Docker File Name" type="text" tabindex="1" autofocus>
+                </fieldset>
+                {% endif %}
+
+                <!-- docker FILE SUMMARY INPUT -->
+                <div type="text">Docker File Summary</div>
+                <fieldset>
+                    <textarea name="docker_file_summary" placeholder="Docker File Summary" tabindex="8">{{ dockersummary }}</textarea>
+                </fieldset>
+
+                <!-- CATEGORY INPUT -->
+                 <div type="text">Category</div>
+                {% if errcategory %}
+                <fieldset>
+                    <div class="{{ errcategoy }}">
+                        <fieldset>
+                            <div class="select">
+                                <select name="docker_file_category" class="dropdown" name="Category" tabindex="9">
+                                    <option value="other">Other</option>
+                                    <option value="eh_lab">Ethical Hacking Lab</option>
+                                    <option value="ctf">CTF</option>
+                                    <option value="hint">Hints/Clues</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                </fieldset>
+                {% else %}
+                <fieldset>
+                    <div class="select">
+                        <select name="docker_file_category" class="dropdown" name="Category" tabindex="9">
+                            <option value="other">Other</option>
+                            <option value="eh_lab">Ethical Hacking Lab</option>
+                            <option value="ctf">CTF</option>
+                            <option value="hint">Hints/Clues</option>
+                        </select>
+                    </div>
+                </fieldset>
+                {% endif %}
+
+                <!-- TAG INPUT -->
+                <div type="text">Tag</div>
+                <fieldset>
+                    <div class="select">
+                        <select name="docker_file_tag" class="dropdown" name="Tag" tabindex="11">
+                            <option value="none">none</option>
+                            <option value="authentication buypass / credidentials buypass (ab/cb)">Authentication Buypass / Credidentials Buypass (AB/CB)</option>
+                            <option value="buffer overflow">Buffer Overflow</option>
+                            <option value="bug report">Bug Report</option>
+                            <option value="client side">Client Side</option>
+                            <option value="code injection">Code Injection</option>
+                            <option value="command injection">Command Injection</option>
+                            <option value="console">Console</option>
+                            <option value="cross-site request forgery (CSRF)">Cross-Site Request Forgery (CSRF)</option>
+                            <option value="cross-site scripting (XSS)">Cross-Site Scripting (XSS)</option>
+                            <option value="denial of service (dos)">Denial of Service (DoS)</option>
+                            <option value="deserialization">Deserialization</option>
+                            <option value="file inclusion (LFI/RFI)">File Inclusion (LFI/RFI)</option>
+                            <option value="heap overflow">Heap Overflow</option>
+                            <option value="integer overflow">Integer Overflow</option>
+                            <option value="local">Local</option>
+                            <option value="malware">Malware</option>
+                            <option value="metasploit framework (msf)">Metasploit Framework (MSF)</option>
+                            <option value="null pointer dereference">NULL Pointer Dereference</option>
+                            <option value="object injection">Object Injection</option>
+                            <option value="out of bounds">Out Of Bounds</option>
+                            <option value="pwn2own">Pwn2Own</option>
+                            <option value="race condition">Race Condition</option>
+                            <option value="remote">Remote</option>
+                            <option value="server-side request forgery">Server-Side Request Forgery (SSRF)</option>
+                            <option value="sql injection (sqli)">SQL Injection (SQLi)</option>
+                            <option value="traversal">Traversal</option>
+                            <option value="type confusion">Type Confusion</option>
+                            <option value="use after free (uaf)">Use After Free (UAF)</option>
+                            <option value="wordpress core">WordPress Core</option>
+                            <option value="wordpress plugin">WordPress Plugin</option>
+                            <option value="xml external entity (xxe)">XML External Entity (XXE)</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <!-- FILE INPUT -->
+                <div type="text">Docker File</div>
+                {% if errfile %}
+                    <div class="{{ errfile }}">
+                        <fieldset>    
+                            <input type="file" name="docker_file_fileToUpload" id="fileToUpload" tabindex="12">
+                        </fieldset>
+                    </div>
+                {% else %}
+                    <fieldset>    
+                        <input type="file" name="docker_file_fileToUpload" id="fileToUpload" tabindex="12">
+                    </fieldset>
+                {% endif %}
+
+                 <!-- SUBMIT BUTTON -->
+                <fieldset>
+                    <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="13   ">Submit to database</button>
+                </fieldset>
+            </div>
+
+            <!-- HIDDEN FORMTYPE INPUT -->
+            <input type="hidden" name="formtype" value="dockerfileform">
+
+           
+        </div>
+    </div>
+</form>

@@ -1,0 +1,254 @@
+<form id="upload" action="../src/uploaddockerfile.php" method="post" enctype="multipart/form-data">
+        <div class="grid">
+            <div class="first_column">
+                <br>
+                <div type="text">Ansible Role Name</div>
+                <fieldset>
+                    <input name="ansible_role_name" placeholder="Ansible Role Name" type="text" tabindex="1" autofocus>
+                </fieldset>
+                <div type="text">Ansible Role Summary</div>
+                <fieldset>
+                    <textarea name="ansible_role_summary" placeholder="Ansible Role Summary" tabindex="2">{{ dockersummary }}</textarea>
+                </fieldset>
+                <br>
+
+                <div type="text">Ansible Role repo URL</div>
+                <fieldset>
+                    <input name="ansible_role_repo" placeholder="Ansible Role Repo" type="text" pattern="(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})
+" tabindex="3" autofocus>
+                </fieldset>
+
+                <div type="text">OR</div>
+
+
+                <!-- FILE INPUT -->
+                <div type="text">Ansible Role Zip File</div>
+                {% if errfile %}
+                    <div class="{{ errfile }}">
+                        <fieldset>    
+                            <input type="file" name="ansible_role_fileToUpload" id="ansible_role_fileToUpload" tabindex="4">
+                        </fieldset>
+                    </div>
+                {% else %}
+                    <fieldset>    
+                        <input type="file" name="ansible_role_fileToUpload" id="ansible_role_fileToUpload" tabindex="4">
+                    </fieldset>
+                {% endif %}
+                <br>
+                 <!-- SUBMIT BUTTON -->
+                <fieldset>
+                    <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="5">Submit to database</button>
+                </fieldset>
+            </div>
+            <div class="second_column">
+                <br>
+                <!-- PLATFORM INPUT -->
+                <div type="text">Platform</div>
+                {% if errplatform %}
+                <div class="{{ errplatform }}">
+                    <fieldset>
+                        <div class="select">
+                            <select name="app_platform" class="dropdown" name="Platform" tabindex="10">
+                                <option value="any">Any</option>
+                                <option value="aix">AIX</option>
+                                <option value="alpha">Alpha</option>
+                                <option value="android">Android</option>
+                                <option value="arm">ARM</option>
+                                <option value="ashx">ASHX</option>
+                                <option value="asp">ASP</option>
+                                <option value="aspx">ASPX</option>
+                                <option value="atheos">AtheOS</option>
+                                <option value="beos">BeOS</option>
+                                <option value="bsd">BSD</option>
+                                <option value="bsdi_x86">BSDi_x86</option>
+                                <option value="bsd_ppc">BSD_PPC</option>
+                                <option value="bsd_x86">BSD_x86</option>
+                                <option value="cfm">CFM</option>
+                                <option value="cgi">CGI</option>
+                                <option value="ezine">eZine</option>
+                                <option value="freeBSD">FreeBSD</option>
+                                <option value="freebsd_x86">FreeBSD_x86</option>
+                                <option value="freebsd_x86-64">FreeBSD_x86-64</option>
+                                <option value="generator">Generator</option>
+                                <option value="hardware">hardware</option>
+                                <option value="hp-ux">HP-UX</option>
+                                <option value="immunix">Immunix</option>
+                                <option value="ios">iOS</option>
+                                <option value="irix">IRIX</option>
+                                <option value="java">Java</option>
+                                <option value="json">JSON</option>
+                                <option value="jsp">JSP</option>
+                                <option value="linux">Linux</option>
+                                <option value="linux_crisv32">Linux_CRISv32</option>
+                                <option value="linux_mips">Linux_MIPS</option>
+                                <option value="linux_PPC">Linux_PPC</option>
+                                <option value="linux_sparc">Linux_SPARC</option>
+                                <option value="linux_x86">Linux_x86</option>
+                                <option value="linux_x86-64">Linux_x86-64</option>
+                                <option value="lua">Lua</option>
+                                <option value="macos">macOS</option>
+                                <option value="magazine">Magazine</option>
+                                <option value="minix">MINIX</option>
+                                <option value="multiple">Multiple</option>
+                                <option value="netbsd_x86">NetBSD_x86</option>
+                                <option value="netware">Netware</option>
+                                <option value="nodeJS">NodeJS</option>
+                                <option value="novell">Novell</option>
+                                <option value="openbsd">OpenBSD</option>
+                                <option value="openbsd_x86">openBSD_x86</option>
+                                <option value="osx">OSX</option>
+                                <option value="osx_ppc">OSX_PPC</option>
+                                <option value="palm_os">Palm_OS</option>
+                                <option value="perl">Perl</option>
+                                <option value="php">PHP</option>
+                                <option value="plan9">Plan9</option>
+                                <option value="python">Python</option>
+                                <option value="qnx">QNX</option>
+                                <option value="ruby">Ruby</option>
+                                <option value="sco">SCO</option>
+                                <option value="sco_x86">SCO_x86</option>
+                                <option value="solaris">Solaris</option>
+                                <option value="solaris_mips">Solaris_MIPS</option>
+                                <option value="solaris_sparc">Solaris_SPARC</option>
+                                <option value="solaris_x86">Solaris_x86</option>
+                                <option value="superh_sh4">SuperH_SH4</option>
+                                <option value="system_z">System_z</option>
+                                <option value="tru64">Tru64</option>
+                                <option value="ultrix">ULTRIX</option>
+                                <option value="unix">Unix</option>
+                                <option value="unixware">UnixWare</option>
+                                <option value="windows">Windows</option>
+                                <option value="windows_x86">Windows_x86</option>
+                                <option value="windows_x86-64">Windows_x86-64</option>
+                                <option value="xml">XML</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+                {% else %}
+                    <fieldset>
+                        <div class="select">
+                            <select name="app_platform" class="dropdown" name="Platform" tabindex="10">
+                                <option value="any">Any</option>
+                                <option value="aix">AIX</option>
+                                <option value="alpha">Alpha</option>
+                                <option value="android">Android</option>
+                                <option value="arm">ARM</option>
+                                <option value="ashx">ASHX</option>
+                                <option value="asp">ASP</option>
+                                <option value="aspx">ASPX</option>
+                                <option value="atheos">AtheOS</option>
+                                <option value="beos">BeOS</option>
+                                <option value="bsd">BSD</option>
+                                <option value="bsdi_x86">BSDi_x86</option>
+                                <option value="bsd_ppc">BSD_PPC</option>
+                                <option value="bsd_x86">BSD_x86</option>
+                                <option value="cfm">CFM</option>
+                                <option value="cgi">CGI</option>
+                                <option value="ezine">eZine</option>
+                                <option value="freeBSD">FreeBSD</option>
+                                <option value="freebsd_x86">FreeBSD_x86</option>
+                                <option value="freebsd_x86-64">FreeBSD_x86-64</option>
+                                <option value="generator">Generator</option>
+                                <option value="hardware">hardware</option>
+                                <option value="hp-ux">HP-UX</option>
+                                <option value="immunix">Immunix</option>
+                                <option value="ios">iOS</option>
+                                <option value="irix">IRIX</option>
+                                <option value="java">Java</option>
+                                <option value="json">JSON</option>
+                                <option value="jsp">JSP</option>
+                                <option value="linux">Linux</option>
+                                <option value="linux_crisv32">Linux_CRISv32</option>
+                                <option value="linux_mips">Linux_MIPS</option>
+                                <option value="linux_PPC">Linux_PPC</option>
+                                <option value="linux_sparc">Linux_SPARC</option>
+                                <option value="linux_x86">Linux_x86</option>
+                                <option value="linux_x86-64">Linux_x86-64</option>
+                                <option value="lua">Lua</option>
+                                <option value="macos">macOS</option>
+                                <option value="magazine">Magazine</option>
+                                <option value="minix">MINIX</option>
+                                <option value="multiple">Multiple</option>
+                                <option value="netbsd_x86">NetBSD_x86</option>
+                                <option value="netware">Netware</option>
+                                <option value="nodeJS">NodeJS</option>
+                                <option value="novell">Novell</option>
+                                <option value="openbsd">OpenBSD</option>
+                                <option value="openbsd_x86">openBSD_x86</option>
+                                <option value="osx">OSX</option>
+                                <option value="osx_ppc">OSX_PPC</option>
+                                <option value="palm_os">Palm_OS</option>
+                                <option value="perl">Perl</option>
+                                <option value="php">PHP</option>
+                                <option value="plan9">Plan9</option>
+                                <option value="python">Python</option>
+                                <option value="qnx">QNX</option>
+                                <option value="ruby">Ruby</option>
+                                <option value="sco">SCO</option>
+                                <option value="sco_x86">SCO_x86</option>
+                                <option value="solaris">Solaris</option>
+                                <option value="solaris_mips">Solaris_MIPS</option>
+                                <option value="solaris_sparc">Solaris_SPARC</option>
+                                <option value="solaris_x86">Solaris_x86</option>
+                                <option value="superh_sh4">SuperH_SH4</option>
+                                <option value="system_z">System_z</option>
+                                <option value="tru64">Tru64</option>
+                                <option value="ultrix">ULTRIX</option>
+                                <option value="unix">Unix</option>
+                                <option value="unixware">UnixWare</option>
+                                <option value="windows">Windows</option>
+                                <option value="windows_x86">Windows_x86</option>
+                                <option value="windows_x86-64">Windows_x86-64</option>
+                                <option value="xml">XML</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                {% endif %}
+
+                <!-- TAG INPUT -->
+                <div type="text">Tag</div>
+                <fieldset>
+                    <div class="select">
+                        <select name="app_tag" class="dropdown" name="Tag" tabindex="11">
+                            <option value="none">none</option>
+                            <option value="authentication buypass / credidentials buypass (ab/cb)">Authentication Buypass / Credidentials Buypass (AB/CB)</option>
+                            <option value="buffer overflow">Buffer Overflow</option>
+                            <option value="bug report">Bug Report</option>
+                            <option value="client side">Client Side</option>
+                            <option value="code injection">Code Injection</option>
+                            <option value="command injection">Command Injection</option>
+                            <option value="console">Console</option>
+                            <option value="cross-site request forgery (CSRF)">Cross-Site Request Forgery (CSRF)</option>
+                            <option value="cross-site scripting (XSS)">Cross-Site Scripting (XSS)</option>
+                            <option value="denial of service (dos)">Denial of Service (DoS)</option>
+                            <option value="deserialization">Deserialization</option>
+                            <option value="file inclusion (LFI/RFI)">File Inclusion (LFI/RFI)</option>
+                            <option value="heap overflow">Heap Overflow</option>
+                            <option value="integer overflow">Integer Overflow</option>
+                            <option value="local">Local</option>
+                            <option value="malware">Malware</option>
+                            <option value="metasploit framework (msf)">Metasploit Framework (MSF)</option>
+                            <option value="null pointer dereference">NULL Pointer Dereference</option>
+                            <option value="object injection">Object Injection</option>
+                            <option value="out of bounds">Out Of Bounds</option>
+                            <option value="pwn2own">Pwn2Own</option>
+                            <option value="race condition">Race Condition</option>
+                            <option value="remote">Remote</option>
+                            <option value="server-side request forgery">Server-Side Request Forgery (SSRF)</option>
+                            <option value="sql injection (sqli)">SQL Injection (SQLi)</option>
+                            <option value="traversal">Traversal</option>
+                            <option value="type confusion">Type Confusion</option>
+                            <option value="use after free (uaf)">Use After Free (UAF)</option>
+                            <option value="wordpress core">WordPress Core</option>
+                            <option value="wordpress plugin">WordPress Plugin</option>
+                            <option value="xml external entity (xxe)">XML External Entity (XXE)</option>
+                        </select>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- HIDDEN FORMTYPE INPUT -->
+            <input type="hidden" name="formtype" value="ansibleroleform">
+        </div>
+</form>

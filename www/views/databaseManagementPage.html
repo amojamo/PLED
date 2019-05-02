@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Private CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/uploadcve.css">
+
+    <meta name="author" content="Karoline M. Arnsen, Adrian J. Moen, Askil Amundøy Olsen">
+  
+    <title>PLED</title>
+
+    <!-- Tab select scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+				localStorage.setItem('activeTab', $(e.target).attr('href'));
+			});
+			var activeTab = localStorage.getItem('activeTab');
+			if(activeTab){
+				$('#myTab a[href="' + activeTab + '"]').tab('show');
+			}
+		});
+	</script>
+
+
+</head>
+</head>
+<body>
+	{% if error %}
+	<script>
+		alert("Something went wrong");
+	</script>
+	{% endif %}
+	{% if uploaded %}
+	<script>
+		{% if uploaded == "true" %}
+			alert("Your application was successfully uploaded!");
+		{% else %}
+			alert("Something went wrong, please try again later");
+		{% endif %}
+	</script>
+	{% endif %}
+    <div class="container"><br>
+
+        <h2>PLED Database management page</h2><br>
+        <!-- Nav tabs -->
+	    <nav>
+	  		<div class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+	    		<a class="nav-item nav-link active" id="nav-find-tab" data-toggle="tab" href="#nav-find" role="tab" aria-controls="nav-find" aria-selected="true">Find</a>
+	    		<a class="nav-item nav-link" id="nav-add-tab" data-toggle="tab" href="#nav-add" role="tab" aria-controls="nav-add" aria-selected="false">Add</a>
+	    		<a class="nav-item nav-link" id="nav-modify-tab" data-toggle="tab" href="#nav-modify" role="tab" aria-controls="nav-modify" aria-selected="false">Modify</a>
+	    		<a class="nav-item nav-link" id="nav-delete-tab" data-toggle="tab" href="#nav-delete" role="tab" aria-controls="nav-delete" aria-selected="false">Delete</a>
+	  		</div>
+	 	</nav>
+	  	<!-- Tab panes -->
+	  	<div class="tab-content" id="nav-tabContent">
+	  		
+	  		<!-- Find applications in DB -->
+	  		<div class="tab-pane fade show active" id="nav-find" role="tabpanel" aria-labelledby="nav-find-tab">
+	  			{% include 'databasecontent.html' %}
+	  		</div>
+
+	  		<!-- Add file to database -->
+	  		<div class="tab-pane fade" id="nav-add" role="tabpanel" aria-labelledby="nav-add-tab">
+	  			<br><h4>Add file to database</h4>
+			    <div type="text">Upload Type</div>
+			    <fieldset>
+			        <div class="select">
+			            <select id="uploadtypeselector" class="dropdown" name="{{ formtype }}" tabindex="1" selected="applicationform">
+			                <option value="applicationform">Vulnerable Application</option>
+			                <option value="challengeform">CTF Challenge</option>
+			                <option value="malwareform">Malware</option>
+			                <option value="ansibleform">Ansible Role</option>
+			            </select>
+			        </div>
+			    </fieldset>
+			    <div id="applicationform" style="display: none;">
+	    			{% include 'applicationform.html' %}
+    			</div>
+			    <div id="challengeform" style="display: none;">
+			        {% include 'challengeform.html' %}
+			    </div>
+			    <div id="malwareform" style="display: none;">
+			        {% include 'malwareform.html' %}
+			    </div>
+			    <div id="ansibleform" style="display: none;">
+			        {% include 'ansibleroleform.html' %}
+			    </div>
+	  		</div>
+
+	  		<!-- Modify -->
+	  		<div class="tab-pane fade" id="nav-modify" role="tabpanel" aria-labelledby="nav-modify-tab">
+	  			{% include 'modifycontent.html' %}
+	  		</div>
+	  		
+	  		<!-- Delete -->
+	  		<div class="tab-pane fade" id="nav-delete" role="tabpanel" aria-labelledby="nav-delete-tab">
+	  			delete
+	  		</div>
+	    </div>
+    </div>
+
+    <script type="text/javascript">
+    	if (localStorage.getItem('form_frame')) {
+        $("#uploadtypeselector option").eq(localStorage.getItem('form_frame')).prop('selected', true);
+        	v = localStorage.getItem('form_frame');
+        	changeview(v);
+    	} 
+
+    	document.getElementById('nav-add-tab').addEventListener("click",function(){
+			console.log("click");
+
+
+			if ($("#uploadtypeselector").attr("name") == "") {
+			v = document.getElementById('uploadtypeselector').value;
+			} else {
+				v = $("#uploadtypeselector").attr("name");
+			}
+			console.log("if " + v);
+			changeview(v);
+
+		});
+
+
+    	$("#uploadtypeselector").change(function() {
+			val = $(this).val();
+			deleteview(v);
+			changeview(val);
+			v = val;
+		});
+
+		function changeview(val) {
+			console.log("changed to: " + val);
+			document.getElementById(val).style.display = "block";
+			document.getElementById('uploadtypeselector').value = val;
+			localStorage.setItem('form_frame', val);
+		}
+
+		function deleteview(val) {
+			console.log("Deleted view: " + val);
+			document.getElementById(val).style.display = "none";
+		}
+    </script>
+
+    <!-- script for select form -->
+   	<!--<script src="../js/selectableform.js"></script>-->
+
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" type="text/css" href="../css/uploadcve.css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <meta name="description" content="Administrative GUI for uploading new CVE-objects to the vulnerability database, PLED">
+    <!-- keywords for search engines?
+        <meta name="keywords" content="PLED database, Vulnerability database, administration">
+    -->
+    <meta name="author" content="Karoline M. Arnsen, Adrian J. Moen, Askil Amundøy Olsen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content</title>
+</head>
+<body>
+{% for object in data %}
+    <div type="text">App name: {{ object.name }}</div>
+    <div type="text">App id: {{ object._id }}</div>
+    {% for file in object.filedata %}
+        <div type="text">Filename: {{ file.filename }}</div>
+        <div type="text">Filesize: {{ file.filesize }}</div>
+    {% endfor %}
+{% endfor %}
+</body>
+</html>
