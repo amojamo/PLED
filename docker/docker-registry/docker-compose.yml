@@ -18,6 +18,8 @@ services:
     restart: always
     expose:
       - 5000
+    env_file:
+      - ./swift.env
     environment:
       TCP_PORTS: '5000'
       VIRTUAL_HOST: '*:5000, https://*:5000'
