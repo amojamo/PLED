@@ -1,0 +1,25 @@
+version: 0.1
+log:
+  level: debug
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  swift:
+    username: <OPENSTACK_USER>
+    password: <OPENSTACK_PASSWORD>
+    authurl: <OPENSTACK_AUTHURL>
+    domain: <OPENSTACK_DOMAIN>
+    tenantid: <OPENSTACK_TENTANT/PROJECT_ID>
+    insecureskipverify: true
+    region: <OPENSTACK_REGION>
+    container: <OPENSTACK__REGISTRY_CONTAINER>
+http:
+  addr: :5000
+  headers:
+    X-Content-Type-Options: [nosniff]
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
