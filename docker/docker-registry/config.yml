@@ -8,7 +8,7 @@ storage:
     blobdescriptor: inmemory
   swift:
     username: BITSEC3_V19_PLED_service
-    password: "dOtNUh2T9bn5"
+    password: $SWIFTPASS
     authurl: https://api.skyhigh.iik.ntnu.no:5000/v3
     domain: Default
     tenantid: a056038438f14cd9b3b69744dc334774
