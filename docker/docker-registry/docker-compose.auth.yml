@@ -6,4 +6,4 @@ services:
       REGISTRY_AUTH_HTPASSWD_REALM: 'pled'
       REGISTRY_AUTH_HTPASSWD_PATH: '/httpasswd_storage/htpasswd'
     volumes:
-      - ~/htpasswd_backup:/httpasswd_storage
+      - /home/ubuntu/htpasswd_backup:/httpasswd_storage
