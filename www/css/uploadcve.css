@@ -32,12 +32,20 @@ body {
     box-shadow: 0 0 5px red;
 }
 
+.errborderfile {
+    width: 162px;
+    height: 31px;
+    box-shadow: 0 0 5px red;
+}
+
 .container {
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
     max-width: 1000px;
     width: 100%;
-    margin: 25px auto;
+    margin: 45px auto;
     position: relative;
     background: #F9F9F9;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -160,22 +168,12 @@ fieldset {
 
 .first_column {
     grid-column: 1/2;
+    margin-top: 40px;
 }
 
 .second_column {
     grid-column: 2/3;
-}
-
-.displaydbcontent {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    width: 200px;
-    height: auto;
-    display: inline-block;
-    padding-right: 15px;
-    padding-left: 15px;
-    border: 1px solid #efefef;
-    background-color: white;
+    margin-top: 40px;
 }
 
 .search {
@@ -240,7 +238,7 @@ form.searchform::after {
     text-align: left;
     margin-right: 10px;
     margin-bottom: 10px;
-    width: 230px;
+    width: 220px;
     height: auto;
     display: inline-block;
     padding-right: 15px;
@@ -282,4 +280,9 @@ form.searchform::after {
 
 .title {
     font-weight: bold;
+}
+
+.small {
+    line-height: 15px;
+    margin: 0 0 10px;
 }

@@ -17,24 +17,27 @@
 				<b>CVE:</b> {{ res.cve }}<br>
 			</button>
 			<div class="content">
-				<form id="formstyle" action="../src/uploadapplication.php" method="post" enctype="multipart/form-data">
-					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
+				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
+					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br>
 					<div class="grid">       
 	            		<div class="first_column">
  	            			<!-- APPLICATON NAME INPUT -->
                 			<div type="text">Application Name</div>
 	            			<fieldset>
 			                    <input name="app_name" placeholder="Application Name" value="{{ res.application_name }}" type="text" tabindex="1" autofocus>
+			                    <input type="hidden" name="old_app_name" value="{{ res.application_name }}">
 			                </fieldset>
 			                <!-- APPLICATION SUMMARY INPUT -->
 			                <div type="text">Application Summary</div>
 			                <fieldset>
 			                    <textarea name="app_summary" placeholder="Application Summary" tabindex="2">{{ res.summary }}</textarea>
+			                    <input type="hidden" name="old_app_summary" value="{{ res.summary }}">
 			                </fieldset>
 			                <!-- CVE-ID INPUT -->
                 			<div type="text">CVE-ID (CVE-YYYY-XXXX)</div>
                 			<fieldset>
 		                        <input name="app_cve" placeholder="{{ placeholdercve }}" value="{{ res.cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="3" autofocus>
+		                        <input type="hidden" name="old_app_cve" value="{{ res.cve }}">
 		                    </fieldset>
 		                    <!-- SUBMIT BUTTON -->
 				            <fieldset>
@@ -51,7 +54,7 @@
                 			<div type="text">Platform</div>
                 			<fieldset>
 		                        <div class="select">
-		                            <select name="app_platform" id="app_platform_{{ res._id }}" class="dropdown" selected="{{ res.platform }}" tabindex="5">
+		                            <select name="app_platform" id="app_platform_{{ res._id }}" class="dropdown" tabindex="5">
 		                                <option value="any">---</option>
 		                                <option value="aix">AIX</option>
 		                                <option value="alpha">Alpha</option>
@@ -126,12 +129,13 @@
 		                                <option value="xml">XML</option>
 		                            </select>
 		                        </div>
+		                        <input type="hidden" name="old_app_platform" value="{{ res.platform }}">
 		                    </fieldset>
 		                    <!-- TAG INPUT -->
                		 		<div type="text">Tag</div>
                		 		<fieldset>
 			                    <div class="select">
-			                        <select name="app_tag" id="app_tag_{{ res._id }}" class="dropdown" selected="{{ res.tag }}" tabindex="6">
+			                        <select name="app_tag" id="app_tag_{{ res._id }}" class="dropdown" tabindex="6">
 			                            <option value="none">---</option>
 			                            <option value="authentication buypass / credidentials buypass (ab/cb)">Authentication Buypass / Credidentials Buypass (AB/CB)</option>
 			                            <option value="buffer overflow">Buffer Overflow</option>
@@ -166,9 +170,12 @@
 			                            <option value="xml external entity (xxe)">XML External Entity (XXE)</option>
 			                        </select>
 			                    </div>
+			                    <input type="hidden" name="old_app_tag" value="{{ res.tag }}">
 			                </fieldset>
 	            		</div>
 	            	</div>
+	            	<input type="hidden" name="upload_type" value="vuln_application">
+	            	<input type="hidden" name="_id" value="{{ res._id }}">
 	            </form>
             </div>
 		{% elseif res.Upload_Type == "CTF Challenge" %}
@@ -179,7 +186,7 @@
 				<b>Type:</b> {{ res.type }}<br>
 			</button>
 			<div class="content">
-				<form id="formstyle" action="../src/uploadchallenge.php" method="post" enctype="multipart/form-data">
+				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
 					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
 					<div class="grid">       
 	            		<div class="first_column">
@@ -187,16 +194,21 @@
                 			<div type="text">Challenge Name </div>
                 			<fieldset>
 			                    <input name="challenge_name" placeholder="Challenge Name" value="{{ res.name }}" type="text" tabindex="1" autofocus>
+			                    <input type="hidden" name="old_challenge_name" value="{{ res.name }}">
 			                </fieldset>	
 			                <!-- AUTHOR INPUT -->
 			                <div type="text">Author</div>
 			                <fieldset>
-			                    <input name="challenge_author" placeholder="Challenge Author" value="{{ res.author }}" type="text" tabindex="4" autofocus>
+			                    <input name="challenge_author" placeholder="Challenge Author" 
+			                    value="{{ res.author }}" type="text" tabindex="4" autofocus>
+			                    <input type="hidden" name="old_challenge_author" 
+			                    value="{{ res.author }}">
 			                </fieldset>
 			                <!-- PORT -->
 			                <div type="text">Port (digits only)</div>
 			                <fieldset>
 			                    <input type="text" name="challenge_port" value="{{ res.port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
+			                    <input type="hidden" name="old_challenge_port" value="{{ res.port }}">
 			                </fieldset>
 			                <!-- TYPE INPUT -->
  			                <div type="text">Type</div>
@@ -209,6 +221,7 @@
 			                            <option value="mixed">Mixed</option>
 			                        </select>
 			                    </div>
+			                    <input type="hidden" name="old_challenge_type" value="{{ res.type }}">
 			                </fieldset>
 			                <!-- CHALLENGE CATEGORY INPUT -->
 			                <div type="text">Category</div>
@@ -229,12 +242,13 @@
 			                            <option value="programming">Programming</option>
 			                        </select>
 			                    </div>
+			                    <input type="hidden" name="old_challenge_category" value="{{ res.category }}">
 			                </fieldset>
 			                <!-- DIFFICULTY LEVEL INPUT -->
 			                <div type="text">Difficulty Level</div>
 			                <fieldset>
 			                    <div class="select">
-			                        <select name="res.difficulty" id="c_difficulty_{{ res._id }}" class="dropdown">
+			                        <select name="challenge_difficulty" id="c_difficulty_{{ res._id }}" class="dropdown">
 			                            <option value="other">---</option>
 			                            <option value="novice">Novice</option>
 			                            <option value="apprentice">Apprentice</option>
@@ -243,6 +257,7 @@
 			                            <option value="master">Master</option>
 			                        </select>
 			                    </div>
+			                    <input type="hidden" name="old_challenge_difficulty" value="{{ res.difficulty }}">
 			                </fieldset>
 			                <!-- SUBMIT BUTTON -->
 				            <fieldset style="display: inline-block;">
@@ -258,33 +273,38 @@
 			                 <!-- POINTS -->
 			                <div type="text">Points (digits only)</div>
 			                <fieldset>
-			                    <input type="text" name="res.points" value="{{ challenge_points }}" placeholder="Challenge points" tabindex="8" autofocus pattern="\d*">
+			                    <input type="text" name="challenge_points" value="{{ res.points }}" placeholder="Challenge points" tabindex="8" autofocus pattern="\d*">
+			                    <input type="hidden" name="old_challenge_points" value="{{ res.points }}">
 			                </fieldset>
 
 			                <!-- WALKTHROUGH -->
-			                <div type="type">Walkthough</div>
+			                <div type="type">Walkthrough</div>
 			                <fieldset>
-			                    <textarea name="res.walkthrough" placeholder="Challenge walkthrough" tabindex="9">{{ challenge_walkthrough }}</textarea>
+			                    <textarea name="challenge_walkthrough" placeholder="Challenge walkthrough" tabindex="9">{{ res.walkthrough }}</textarea>
+			                    <input type="hidden" name="old_challenge_walkthrough" value="{{ res.walkthrough }}">
 			                </fieldset>
 
 			                <!-- FLAG INPUT -->
 			                <div type="text">Flag</div>
 			                <fieldset>
-			                    <input type="text" name="res.flag" placeholder="Challenge flag" value="{{ challenge_flag }}" tabindex="10" autofocus>
+			                    <input type="text" name="challenge_flag" placeholder="Challenge flag" value="{{ res.flag }}" tabindex="10" autofocus>
+			                    <input type="hidden" name="old_challenge_flag" value="{{ res.flag }}">
 			                </fieldset>
 	            		</div>
 	            	</div>
+	            	<input type="hidden" name="upload_type" value="ctf_challenge">
+	            	<input type="hidden" name="_id" value="{{ res._id }}">
 	            </form>
 			</div>
 		{% elseif res.Upload_Type == "Malware" %}
 			<button class="collapsibleform">
 				<b>Upload Type: </b>{{ res.Upload_Type }} <br>
 				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.name }}<br>
+				<b>Name:</b> {{ res.	name }}<br>
 				<b>Type:</b> {{ res.type }}<br>
 			</button>
 			<div class="content">
-				<form id="formstyle" action="../src/uploadmalware.php" method="post" enctype="multipart/form-data">
+				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
 					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
 					<div class="grid">       
 	            		<div class="first_column">
@@ -292,11 +312,13 @@
                 			<div type="text">Malware Name</div>
 	            			<fieldset>
 			                    <input name="malware_name" placeholder="Malware Name" value="{{ res.name }}" type="text" tabindex="1" autofocus>
+			                    <input type="hidden" name="old_malware_name" value="{{ res.name }}">
 			                </fieldset>
 			                <!-- docker FILE SUMMARY INPUT -->
 			                <div type="text">Malware Summary</div>
 			                <fieldset>
 			                    <textarea name="malware_summary" placeholder="Malware Summary" tabindex="8">{{ res.summary }}</textarea>
+			                    <input type="hidden" name="old_malware_summary" value="{{ res.summary }}">
 			                </fieldset>
 			                <!-- SUBMIT BUTTON -->
 				            <fieldset style="display: inline-block;">
@@ -388,6 +410,7 @@
 			                            <option value="xml">XML</option>
 			                        </select>
 			                    </div>
+			                    <input type="hidden" name="old_malware_platform" value="{{ res.platform }}">
 			                </fieldset>
 
 			                <!-- TYPE INPUT -->
@@ -395,7 +418,7 @@
 			                <fieldset>
 			                    <div class="select">
 			                        <select name="malware_type" id="mw_type_{{ res._id }}" class="dropdown" selected="{{ res.type }}" tabindex="10">
-			                            <option value="---">---</option>
+			                            <option value="none">---</option>
 			                            <option value="adware">Adware</option>
 			                            <option value="spyware">Spyware</option>
 			                            <option value="virus">Virus</option>
@@ -409,9 +432,12 @@
 			                            <option value="browser_hijacker">Browser Hijacker</option>
 			                            <option value="other">Other</option>
 			                    </select>
+			                    <input type="hidden" name="old_malware_type" value="{{ res.type }}">
 			                </fieldset>
 	            		</div>
 	            	</div>
+	            	<input type="hidden" name="upload_type" value="malware">
+	            	<input type="hidden" name="_id" value="{{ res._id }}">
 	            </form>
 	        </div>
 		{% endif %}

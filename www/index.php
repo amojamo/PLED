@@ -6,12 +6,14 @@ $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
 
 $ini_array = parse_ini_file("./conf/phpconfig.ini", true);
-print_r($ini_array["ip"]);
 
 $data['placeholdercve'] = "CVE-ID";
 
 if(isset($_GET['uploaded'])){
 	$data['uploaded'] = $_GET['uploaded'];
+}
+if(isset($_GET['updated'])){
+	$data['updated'] = $_GET['updated'];
 }
 
 // Get contents from database '.$ini_array["ip"].'

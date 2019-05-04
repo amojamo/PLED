@@ -1,1 +1,4 @@
-from php:7.3-apache
+FROM php:7.3-apache
+
+COPY ./phpconf.ini /usr/local/etc/php/conf.d/
+EXPOSE 80

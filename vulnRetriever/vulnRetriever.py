@@ -103,6 +103,7 @@ if UPDATER:
 	else:
 		print('No dates found, run in normal mode to populate database')
 		quit()
+		
 #If an id is added as argument
 #Scan just this exploit
 elif EXPLOITID:

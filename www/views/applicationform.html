@@ -1,22 +1,19 @@
 <form id="formstyle" action="../src/uploadapplication.php" method="post" enctype="multipart/form-data">
     <div id="applicationform" class="applicationform">
+        <div class="errmsg">{{ errmsg }}</div>
         <div class="grid">        
-            <div class="first_column">
-                <div class="errmsg">{{ errmsg }}</div>
-                <br>
+            <div class="first_column" style="margin-top: 40px;">
                 <!-- APPLICATON NAME INPUT -->
                 <div type="text">Application Name *</div>
-                {% if errname %}
                 <fieldset>
+                {% if errname %}
                     <div class="{{ errname }}">
                         <input name="app_name" placeholder="Application Name" value="{{ app_name }}" type="text" tabindex="1" autofocus>
                     </div>
-                </fieldset>
                 {% else %}
-                <fieldset>
                     <input name="app_name" placeholder="Application Name" value="{{ app_name }}" type="text" tabindex="1" autofocus>
-                </fieldset>
                 {% endif %}
+                </fieldset>
 
                 <!-- APPLICATION SUMMARY INPUT -->
                 <div type="text">Application Summary</div>
@@ -24,169 +21,102 @@
                     <textarea name="app_summary" placeholder="Application Summary" tabindex="2">{{ app_summary }}</textarea>
                 </fieldset>
 
-                <!-- PLATFORM INPUT -->
-                <div type="text">Platform</div>
-                {% if errplatform %}
-                <div class="{{ errplatform }}">
-                    <fieldset>
-                        <div class="select">
-                            <select name="app_platform" class="dropdown" id="platform" selected="{{ app_platform }}" tabindex="10">
-                                <option value="any">---</option>
-                                <option value="aix">AIX</option>
-                                <option value="alpha">Alpha</option>
-                                <option value="android">Android</option>
-                                <option value="arm">ARM</option>
-                                <option value="ashx">ASHX</option>
-                                <option value="asp">ASP</option>
-                                <option value="aspx">ASPX</option>
-                                <option value="atheos">AtheOS</option>
-                                <option value="beos">BeOS</option>
-                                <option value="bsd">BSD</option>
-                                <option value="bsdi_x86">BSDi_x86</option>
-                                <option value="bsd_ppc">BSD_PPC</option>
-                                <option value="bsd_x86">BSD_x86</option>
-                                <option value="cfm">CFM</option>
-                                <option value="cgi">CGI</option>
-                                <option value="ezine">eZine</option>
-                                <option value="freeBSD">FreeBSD</option>
-                                <option value="freebsd_x86">FreeBSD_x86</option>
-                                <option value="freebsd_x86-64">FreeBSD_x86-64</option>
-                                <option value="generator">Generator</option>
-                                <option value="hardware">hardware</option>
-                                <option value="hp-ux">HP-UX</option>
-                                <option value="immunix">Immunix</option>
-                                <option value="ios">iOS</option>
-                                <option value="irix">IRIX</option>
-                                <option value="java">Java</option>
-                                <option value="json">JSON</option>
-                                <option value="jsp">JSP</option>
-                                <option value="linux">Linux</option>
-                                <option value="linux_crisv32">Linux_CRISv32</option>
-                                <option value="linux_mips">Linux_MIPS</option>
-                                <option value="linux_PPC">Linux_PPC</option>
-                                <option value="linux_sparc">Linux_SPARC</option>
-                                <option value="linux_x86">Linux_x86</option>
-                                <option value="linux_x86-64">Linux_x86-64</option>
-                                <option value="lua">Lua</option>
-                                <option value="macos">macOS</option>
-                                <option value="magazine">Magazine</option>
-                                <option value="minix">MINIX</option>
-                                <option value="multiple">Multiple</option>
-                                <option value="netbsd_x86">NetBSD_x86</option>
-                                <option value="netware">Netware</option>
-                                <option value="nodeJS">NodeJS</option>
-                                <option value="novell">Novell</option>
-                                <option value="openbsd">OpenBSD</option>
-                                <option value="openbsd_x86">openBSD_x86</option>
-                                <option value="osx">OSX</option>
-                                <option value="osx_ppc">OSX_PPC</option>
-                                <option value="palm_os">Palm_OS</option>
-                                <option value="perl">Perl</option>
-                                <option value="php">PHP</option>
-                                <option value="plan9">Plan9</option>
-                                <option value="python">Python</option>
-                                <option value="qnx">QNX</option>
-                                <option value="ruby">Ruby</option>
-                                <option value="sco">SCO</option>
-                                <option value="sco_x86">SCO_x86</option>
-                                <option value="solaris">Solaris</option>
-                                <option value="solaris_mips">Solaris_MIPS</option>
-                                <option value="solaris_sparc">Solaris_SPARC</option>
-                                <option value="solaris_x86">Solaris_x86</option>
-                                <option value="superh_sh4">SuperH_SH4</option>
-                                <option value="system_z">System_z</option>
-                                <option value="tru64">Tru64</option>
-                                <option value="ultrix">ULTRIX</option>
-                                <option value="unix">Unix</option>
-                                <option value="unixware">UnixWare</option>
-                                <option value="windows">Windows</option>
-                                <option value="windows_x86">Windows_x86</option>
-                                <option value="windows_x86-64">Windows_x86-64</option>
-                                <option value="xml">XML</option>
-                            </select>
-                        </div>
-                    </fieldset>
-                </div>
+                <!-- FILE INPUT -->
+                <div type="text">File *</div>
+                {% if errfile %}
+                    <div class="{{ errfile }}">
+                        <fieldset>    
+                            <input type="file" name="app_fileToUpload" id="fileToUpload" tabindex="12">
+                        </fieldset>
+                    </div>
                 {% else %}
-                    <fieldset>
-                        <div class="select">
-                            <select name="app_platform" id="platform" class="dropdown" selected="{{ app_platform }}" tabindex="10">
-                                <option value="any">---</option>
-                                <option value="aix">AIX</option>
-                                <option value="alpha">Alpha</option>
-                                <option value="android">Android</option>
-                                <option value="arm">ARM</option>
-                                <option value="ashx">ASHX</option>
-                                <option value="asp">ASP</option>
-                                <option value="aspx">ASPX</option>
-                                <option value="atheos">AtheOS</option>
-                                <option value="beos">BeOS</option>
-                                <option value="bsd">BSD</option>
-                                <option value="bsdi_x86">BSDi_x86</option>
-                                <option value="bsd_ppc">BSD_PPC</option>
-                                <option value="bsd_x86">BSD_x86</option>
-                                <option value="cfm">CFM</option>
-                                <option value="cgi">CGI</option>
-                                <option value="ezine">eZine</option>
-                                <option value="freeBSD">FreeBSD</option>
-                                <option value="freebsd_x86">FreeBSD_x86</option>
-                                <option value="freebsd_x86-64">FreeBSD_x86-64</option>
-                                <option value="generator">Generator</option>
-                                <option value="hardware">hardware</option>
-                                <option value="hp-ux">HP-UX</option>
-                                <option value="immunix">Immunix</option>
-                                <option value="ios">iOS</option>
-                                <option value="irix">IRIX</option>
-                                <option value="java">Java</option>
-                                <option value="json">JSON</option>
-                                <option value="jsp">JSP</option>
-                                <option value="linux">Linux</option>
-                                <option value="linux_crisv32">Linux_CRISv32</option>
-                                <option value="linux_mips">Linux_MIPS</option>
-                                <option value="linux_PPC">Linux_PPC</option>
-                                <option value="linux_sparc">Linux_SPARC</option>
-                                <option value="linux_x86">Linux_x86</option>
-                                <option value="linux_x86-64">Linux_x86-64</option>
-                                <option value="lua">Lua</option>
-                                <option value="macos">macOS</option>
-                                <option value="magazine">Magazine</option>
-                                <option value="minix">MINIX</option>
-                                <option value="multiple">Multiple</option>
-                                <option value="netbsd_x86">NetBSD_x86</option>
-                                <option value="netware">Netware</option>
-                                <option value="nodeJS">NodeJS</option>
-                                <option value="novell">Novell</option>
-                                <option value="openbsd">OpenBSD</option>
-                                <option value="openbsd_x86">openBSD_x86</option>
-                                <option value="osx">OSX</option>
-                                <option value="osx_ppc">OSX_PPC</option>
-                                <option value="palm_os">Palm_OS</option>
-                                <option value="perl">Perl</option>
-                                <option value="php">PHP</option>
-                                <option value="plan9">Plan9</option>
-                                <option value="python">Python</option>
-                                <option value="qnx">QNX</option>
-                                <option value="ruby">Ruby</option>
-                                <option value="sco">SCO</option>
-                                <option value="sco_x86">SCO_x86</option>
-                                <option value="solaris">Solaris</option>
-                                <option value="solaris_mips">Solaris_MIPS</option>
-                                <option value="solaris_sparc">Solaris_SPARC</option>
-                                <option value="solaris_x86">Solaris_x86</option>
-                                <option value="superh_sh4">SuperH_SH4</option>
-                                <option value="system_z">System_z</option>
-                                <option value="tru64">Tru64</option>
-                                <option value="ultrix">ULTRIX</option>
-                                <option value="unix">Unix</option>
-                                <option value="unixware">UnixWare</option>
-                                <option value="windows">Windows</option>
-                                <option value="windows_x86">Windows_x86</option>
-                                <option value="windows_x86-64">Windows_x86-64</option>
-                                <option value="xml">XML</option>
-                            </select>
-                        </div>
+                    <fieldset>    
+                        <input type="file" name="app_fileToUpload" id="fileToUpload" tabindex="12">
                     </fieldset>
                 {% endif %}
+            </div>
+
+            <div class="second_column">
+                <!-- PLATFORM INPUT -->
+                <div type="text">Platform</div>
+                <fieldset>
+                    <div class="select">
+                        <select name="app_platform" id="platform" class="dropdown" selected="{{ app_platform }}" tabindex="10">
+                            <option value="any">---</option>
+                            <option value="aix">AIX</option>
+                            <option value="alpha">Alpha</option>
+                            <option value="android">Android</option>
+                            <option value="arm">ARM</option>
+                            <option value="ashx">ASHX</option>
+                            <option value="asp">ASP</option>
+                            <option value="aspx">ASPX</option>
+                            <option value="atheos">AtheOS</option>
+                            <option value="beos">BeOS</option>
+                            <option value="bsd">BSD</option>
+                            <option value="bsdi_x86">BSDi_x86</option>
+                            <option value="bsd_ppc">BSD_PPC</option>
+                            <option value="bsd_x86">BSD_x86</option>
+                            <option value="cfm">CFM</option>
+                            <option value="cgi">CGI</option>
+                            <option value="ezine">eZine</option>
+                            <option value="freeBSD">FreeBSD</option>
+                            <option value="freebsd_x86">FreeBSD_x86</option>
+                            <option value="freebsd_x86-64">FreeBSD_x86-64</option>
+                            <option value="generator">Generator</option>
+                            <option value="hardware">hardware</option>
+                            <option value="hp-ux">HP-UX</option>
+                            <option value="immunix">Immunix</option>
+                            <option value="ios">iOS</option>
+                            <option value="irix">IRIX</option>
+                            <option value="java">Java</option>
+                            <option value="json">JSON</option>
+                            <option value="jsp">JSP</option>
+                            <option value="linux">Linux</option>
+                            <option value="linux_crisv32">Linux_CRISv32</option>
+                            <option value="linux_mips">Linux_MIPS</option>
+                            <option value="linux_PPC">Linux_PPC</option>
+                            <option value="linux_sparc">Linux_SPARC</option>
+                            <option value="linux_x86">Linux_x86</option>
+                            <option value="linux_x86-64">Linux_x86-64</option>
+                            <option value="lua">Lua</option>
+                            <option value="macos">macOS</option>
+                            <option value="magazine">Magazine</option>
+                            <option value="minix">MINIX</option>
+                            <option value="multiple">Multiple</option>
+                            <option value="netbsd_x86">NetBSD_x86</option>
+                            <option value="netware">Netware</option>
+                            <option value="nodeJS">NodeJS</option>
+                            <option value="novell">Novell</option>
+                            <option value="openbsd">OpenBSD</option>
+                            <option value="openbsd_x86">openBSD_x86</option>
+                            <option value="osx">OSX</option>
+                            <option value="osx_ppc">OSX_PPC</option>
+                            <option value="palm_os">Palm_OS</option>
+                            <option value="perl">Perl</option>
+                            <option value="php">PHP</option>
+                            <option value="plan9">Plan9</option>
+                            <option value="python">Python</option>
+                            <option value="qnx">QNX</option>
+                            <option value="ruby">Ruby</option>
+                            <option value="sco">SCO</option>
+                            <option value="sco_x86">SCO_x86</option>
+                            <option value="solaris">Solaris</option>
+                            <option value="solaris_mips">Solaris_MIPS</option>
+                            <option value="solaris_sparc">Solaris_SPARC</option>
+                            <option value="solaris_x86">Solaris_x86</option>
+                            <option value="superh_sh4">SuperH_SH4</option>
+                            <option value="system_z">System_z</option>
+                            <option value="tru64">Tru64</option>
+                            <option value="ultrix">ULTRIX</option>
+                            <option value="unix">Unix</option>
+                            <option value="unixware">UnixWare</option>
+                            <option value="windows">Windows</option>
+                            <option value="windows_x86">Windows_x86</option>
+                            <option value="windows_x86-64">Windows_x86-64</option>
+                            <option value="xml">XML</option>
+                        </select>
+                    </div>
+                </fieldset>
 
                 <!-- TAG INPUT -->
                 <div type="text">Tag</div>
@@ -229,32 +159,8 @@
                     </div>
                 </fieldset>
 
-                <!-- FILE INPUT -->
-                <div type="text">File *</div>
-                {% if errfile %}
-                    <div class="{{ errfile }}">
-                        <fieldset>    
-                            <input type="file" name="app_fileToUpload" id="fileToUpload" tabindex="12">
-                        </fieldset>
-                    </div>
-                {% else %}
-                    <fieldset>    
-                        <input type="file" name="app_fileToUpload" id="fileToUpload" tabindex="12">
-                    </fieldset>
-                {% endif %}
-                
-                <!-- Drop Zone -->
-                <!--
-                <h4>Or drag and drop files below</h4>
-                <div class="upload-drop-zone" id="drop-zone">
-                    Just drag and drop file here
-                </div>-->
-            </div>
-
-            <div class="second_column">
-                <br>
                 <!-- CVE-ID INPUT -->
-                <div type="text">CVE-ID (CVE-YYYY-XXXX) *</div>
+                <div type="text">CVE-ID (CVE-YYYY-XXXX)</div>
                 {% if errcve %}
                 <div class="{{ errcve }}">
                     <fieldset>
@@ -262,29 +168,34 @@
                     </fieldset>
                 </div>
                 {% else %}
-                    <fieldset>
-                        <input name="app_cve" placeholder="{{ placeholdercve }}" value="{{ cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="2" autofocus>
+                    <fieldset style="margin: 0 0 0;">
+                        <input name="app_cve" placeholder="CVE-ID" value="{{ cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="2" autofocus>
                     </fieldset>
                 {% endif %}
+                <div class="small">
+                    Corresponding cve-metadata will be collected from CIRCLs CVE Search <br>(http://cve.circl.lu/) 
+                </div>
 
-                <!-- AUTFILL BUTTON -->
+                <!--
+                <!-- AUTFILL BUTTON 
                 <fieldset>
                     <button name="app_autofill" type="submit" id="upload-autofill" tabindex="3" formaction="../src/cveautofill.php">
                         Autofill
                     </button>
                 </fieldset>
 
-                <!-- CVSS INPUT -->
+                <!-- CVSS INPUT 
                 <div type="text">CVSS</div>
                 <fieldset>
                     <input placeholder="CVSS" name="app_cvss" value="{{ cvss }}" type="text" tabindex="4" autofocus>
                 </fieldset>
 
-                <!-- CVE SUMMARY INPUT -->
+                <!-- CVE SUMMARY INPUT 
                 <div type="text">CVE Summary</div>
                 <fieldset>
                     <textarea name="app_cve_summary" placeholder="CVE Summary" tabindex="5" autofocus>{{ cvesummary }}</textarea>
                 </fieldset>
+                -->
             </div>
 
             <!-- HIDDEN FORMTYPE INPUT -->

@@ -68,7 +68,9 @@
 
 			  	{% if res.vulnerable_configuration %}
 			  		<b>Vulnerable Configuration: </b>
-			  		{{ res.vulnerable_configuration |join(',') }}<br>
+			  		{% for vc in res.vulnerable_configuration %}
+			  			{{ vc | json_encode }}<br>
+			  		{% endfor %}
 			  	{% endif %}
 
 			  	{% if res.file_path %}
@@ -105,7 +107,7 @@
 					<b>Added Date: </b>
 					{{ res.added_date }}<br>
 				{% endif %}
-				{% if ctf_challeneg.port %}
+				{% if res.port %}
 					<b>Port: </b>
 					{{ res.port }}<br>
 				{% endif %}
@@ -279,7 +281,7 @@
 				<b>Added Date: </b>
 				{{ ctf_challenge.added_date }}<br>
 			{% endif %}
-			{% if ctf_challeneg.port %}
+			{% if ctf_challenge.port %}
 				<b>Port: </b>
 				{{ ctf_challenge.port }}<br>
 			{% endif %}

@@ -118,12 +118,14 @@ foreach ($obj['resource'] as $key => $v) {
 
 /**
 *
-*    Check if application name, application category, application 
-*       platform and file is set, return error messages and marks 
-*       fielss if not 
+*    Check if application name and file is set,
+*    return error messages and marks fields if not 
 *
 **/
-if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) || empty($_POST['app_cve'])) {
+if(!empty($_POST['app_cve'])) {
+    $json = file_get_contents('http://cve.circl.lu/api/cve/' . $_POST['app_cve']);
+}
+if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) || $json == 'null') {
     $data['errmsg'] = "Some fields needs to be filled";
     if (empty($_POST['app_name'])) {
         $data['errname'] = "errborder"; 
@@ -131,24 +133,25 @@ if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) 
         $data['app_name'] = $_POST['app_name'];
     }
     if (empty($_FILES['app_fileToUpload']['tmp_name'])) {
-        $data['errfile'] = "errborder"; 
+        $data['errfile'] = "errborderfile"; 
     } else {
         $data['app_fileToUpload'] = $_POST['app_fileToUpload'];
     }
-    if (empty($_POST['app_cve'])) {
-        $data['errcve'] = "errborder";
-    } else {
-        $data['cve'] = $_POST['app_cve'];
+    /**
+    *
+    *   If CVE isset, check if valid in circl and return error if not
+    *
+    **/
+    if(!empty($_POST['app_cve'])) {
+        $json = file_get_contents('http://cve.circl.lu/api/cve/' . $_POST['app_cve']);
+        if ($json != 'null') {
+            $data['cve'] = $_POST['app_cve'];
+        } else {
+            $data['errcve'] = "errborder";
+            $data['placeholdercve'] = "Could not find this CVE in CIRCL";
+        }
     }
-
-    if(!empty($_POST['app_cvss'])) {
-        $data['cvss'] = $_POST['app_cvss'];
-    }
-
-    if(!empty($_POST['app_cve_summary'])) {
-        $data['cvesummary'] = $_POST['app_cve_summary'];
-    }
-
+    
     if(!empty($_POST['app_summary'])) {
         $data['app_summary'] = $_POST['app_summary'];
     }
@@ -164,15 +167,23 @@ if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) 
 *   If everything is set, we can insert the application to swift and mongodb
 *
 *   Stores:
+*     cve data:
 *       - cve
+*       - cwe
+*       - published_date
+*       - impact
+*       - vulnerable_configuration
 *       - css
 *       - cve_summary
+*     
+*     application data:
 *       - application_name
 *       - summary
 *       - category
 *       - platform
 *       - tag
 *       - application name in swift
+*
 *   later, posibility to add uploader/instructor name and/or id 
 **/  
 else {
@@ -207,11 +218,20 @@ else {
         $resource = json_decode($json);
         $resource->resource = [];
         $application_to_add = json_decode($json);
-        $application_to_add->cve = $_POST['app_cve'];
-        if (!empty($_POST['app_cvss']))
-             $application_to_add->cvss = $_POST['app_cvss'];
-        if (!empty($_POST['app_cve_summary']))
-            $application_to_add->cve_summary = $_POST['app_cve_summary'];
+        if(!empty($_POST['app_cve'])) {
+            $json = file_get_contents('http://cve.circl.lu/api/cve/' . $_POST['app_cve']);
+            if($json != 'null') {
+                $json_data = json_decode($json, true);
+                $application_to_add->cve = $_POST['app_cve'];
+                $application_to_add->cve_summary = $json_data['summary'];
+                $application_to_add->cvss = $json_data['cvss'];
+                $application_to_add->cwe = $json_data['cwe'];
+                $application_to_add->published_date = $json_data['Published'];
+                $application_to_add->impact = $json_data['impact'];
+                $application_to_add->vulnerable_configuration = $json_data['vulnerable_configuration'];
+            }
+        }
+        
         $application_to_add->application_name = $_POST['app_name'];
         if (!empty($_POST['app_summary']))
             $application_to_add->summary = $_POST['app_summary'];

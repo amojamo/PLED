@@ -38,18 +38,29 @@
 </head>
 <body>
 	{% if error %}
-	<script>
-		alert("Something went wrong");
-	</script>
+		<script>
+			alert("Something went wrong");
+		</script>
 	{% endif %}
 	{% if uploaded %}
-	<script>
-		{% if uploaded == "true" %}
-			alert("Your application was successfully uploaded!");
-		{% else %}
-			alert("Something went wrong, please try again later");
-		{% endif %}
-	</script>
+		<script>
+			{% if uploaded == "true" %}
+				alert("Your application was successfully uploaded!");
+			{% elseif uploaded == "false" %}
+				alert("Something went wrong, please try again later");
+			{% endif %}
+		</script>
+	{% endif %}
+	{% if updated %}
+		<script>
+			{% if updated == "true" %}
+				alert("The object was successfully updated!");
+			{% elseif updated == "false" %}
+				alert("Something went wrong, please try again later");
+			{% elseif updated == "empty_update" %}
+				alert("No fields were changed, nothing to update");
+			{% endif %}
+		</script>
 	{% endif %}
     <div class="container"><br>
 
@@ -60,7 +71,7 @@
 	    		<a class="nav-item nav-link active" id="nav-find-tab" data-toggle="tab" href="#nav-find" role="tab" aria-controls="nav-find" aria-selected="true">Find</a>
 	    		<a class="nav-item nav-link" id="nav-add-tab" data-toggle="tab" href="#nav-add" role="tab" aria-controls="nav-add" aria-selected="false">Add</a>
 	    		<a class="nav-item nav-link" id="nav-modify-tab" data-toggle="tab" href="#nav-modify" role="tab" aria-controls="nav-modify" aria-selected="false">Modify</a>
-	    		<a class="nav-item nav-link" id="nav-delete-tab" data-toggle="tab" href="#nav-delete" role="tab" aria-controls="nav-delete" aria-selected="false">Delete</a>
+	    		<!--<a class="nav-item nav-link" id="nav-delete-tab" data-toggle="tab" href="#nav-delete" role="tab" aria-controls="nav-delete" aria-selected="false">Delete</a>-->
 	  		</div>
 	 	</nav>
 	  	<!-- Tab panes -->
@@ -104,10 +115,10 @@
 	  			{% include 'modifycontent.html' %}
 	  		</div>
 	  		
-	  		<!-- Delete -->
+	  		<!-- Delete 
 	  		<div class="tab-pane fade" id="nav-delete" role="tabpanel" aria-labelledby="nav-delete-tab">
 	  			delete
-	  		</div>
+	  		</div> -->
 	    </div>
     </div>
 

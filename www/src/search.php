@@ -85,6 +85,9 @@ foreach ($obj['resource'] as $key => $v) {
 	if(isset($v['points'])) {
 		$data['ctf_challenges'][$key]['points'] = $v['points'];
 	}
+	if(isset($v['port'])) {
+		$data['ctf_challenges'][$key]['port'] = $v['port'];
+	}
 	if (isset($v['walkthrough'])) {
 		$data['ctf_challenges'][$key]['walkthrough'] = $v['walkthrough'];
 	}
