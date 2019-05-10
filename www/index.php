@@ -1,19 +1,50 @@
 <?php
 require_once "./vendor/autoload.php";
-
-//phpinfo();
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+//phpinfo();	
 $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
 
-$ini_array = parse_ini_file("./conf/phpconfig.ini", true);
 
-$data['placeholdercve'] = "CVE-ID";
+if(isset($_POST['generateConfig'])) {
+	$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
+	$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
+			'ip = api.pled'.PHP_EOL.
+			's3_key = '.$_POST['s3key'].PHP_EOL.
+			's3_secret = '.$_POST['s3secret'].PHP_EOL.
+			's3_region = '.$_POST['s3region'].PHP_EOL.
+			's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL;
+	fwrite($file, $data);
+	fclose($file);
+	header("Location: index.php");
+}
+
+if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
+	$ini_array = parse_ini_file("./conf/phpconfig.ini", true);
+} else {
+	echo $twig->render('generateConfig.html', array());
+	die();
+}
+
+
+
+
+
+
+
+
+
+$s3 = include 'src/openstack/openstack.php';
 
 if(isset($_GET['uploaded'])){
 	$data['uploaded'] = $_GET['uploaded'];
 }
 if(isset($_GET['updated'])){
 	$data['updated'] = $_GET['updated'];
+}
+if(isset($_GET['deleted'])) {
+	$data['deleted'] = $_GET['deleted'];
 }
 
 // Get contents from database '.$ini_array["ip"].'
@@ -50,7 +81,16 @@ foreach ($obj['resource'] as $key => $v) {
 		$data['vuln_applications'][$key]["vulnerable_configuration"] = $v['vulnerable_configuration'];
 	}
 	if(isset($v['file_path'])) {
-		$data['vuln_applications'][$key]["file_path"] = $v['file_path'];
+		if(isset($v['exploitdb_id'])) {
+			$data['vuln_applications'][$key]["file"] = $v['file_path'];
+		} else {
+			$cmd = $s3->getCommand('GetObject', [
+				'Bucket' => 'pled_files',
+				'Key'    => 'vuln_applications/'.$v['file_path']
+			]);
+			$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+			$data['vuln_applications'][$key]['file'] = $signed_url->getUri();
+		}
 	}
 	if(isset($v['summary'])) {
 		$data['vuln_applications'][$key]["summary"] = $v['summary'];
@@ -103,6 +143,14 @@ foreach ($obj['resource'] as $key => $v) {
 	if(isset($v['flag'])) {
 		$data['ctf_challenges'][$key]['flag'] = $v['flag'];
 	}
+	if(isset($v['file_path'])) {
+		$cmd = $s3->getCommand('GetObject', [
+			'Bucket' => 'pled_files',
+			'Key'    => 'vuln_applications/'.$v['file_path']
+		]);
+		$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+		$data['ctf_challenges'][$key]['file'] = $signed_url->getUri();
+	}
 }
 
 // Malware
@@ -123,6 +171,14 @@ foreach ($obj['resource'] as $key => $v) {
 	}
 	if(isset($v['date_added'])) {
 		$data['malware'][$key]["date_added"] = $v['date_added'];
+	}
+	if(isset($v['file_path'])) {
+		$cmd = $s3->getCommand('GetObject', [
+			'Bucket' => 'pled_files',
+			'Key'    => 'vuln_applications/'.$v['file_path']
+		]);
+		$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+		$data['malware'][$key]['file'] = $signed_url->getUri();
 	}
 }
 

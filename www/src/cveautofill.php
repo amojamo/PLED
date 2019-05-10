@@ -109,8 +109,8 @@ foreach ($obj['resource'] as $key => $v) {
 	if(isset($v['type'])) {
 		$data['malware'][$key]["type"] = $v['type'];
 	}
-	if(isset($v['date_added'])) {
-		$data['malware'][$key]["date_added"] = $v['date_added'];
+	if(isset($v['added_date'])) {
+		$data['malware'][$key]["added_date"] = $v['added_date'];
 	}
 }
 

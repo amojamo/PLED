@@ -1,11 +1,12 @@
 <?php
 require_once "../vendor/autoload.php";
-
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
 // Set up Twig loader system
 $loader = new Twig_Loader_Filesystem('../views');
 $twig   = new Twig_Environment($loader, array());
 $ini_array = parse_ini_file("../conf/phpconfig.ini", true);
-
+$s3 = include 'openstack/openstack.php';
 // Get contents from database '.$ini_array["ip"].'
 
 // Vuln_applications
@@ -94,6 +95,9 @@ foreach ($obj['resource'] as $key => $v) {
 	if(isset($v['flag'])) {
 		$data['ctf_challenges'][$key]['flag'] = $v['flag'];
 	}
+	if(isset($v['file_path'])) {
+		$data['ctf_challenges'][$key]['file_path'] = $v['file_path'];
+	}
 }
 
 // Malware
@@ -112,8 +116,11 @@ foreach ($obj['resource'] as $key => $v) {
 	if(isset($v['type'])) {
 		$data['malware'][$key]["type"] = $v['type'];
 	}
-	if(isset($v['date_added'])) {
-		$data['malware'][$key]["date_added"] = $v['date_added'];
+	if(isset($v['added_date'])) {
+		$data['malware'][$key]["added_date"] = $v['added_date'];
+	}
+	if(isset($v['file_path'])) {
+		$data['malware'][$key]["file_path"] = $v['file_path'];
 	}
 }
 
@@ -135,13 +142,15 @@ if(empty($_POST['search'])) {
 **/
 else {
 	if (!empty($_POST['from'])) {
+		$search = $_POST['search'];
+		$search = preg_replace('/\s+/', '%20', $search);
+		
 		if($_POST['from'] == "modify") {
 			$data['findres'] = [];
 			
 			// vuln_applications
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(application_name%20like%20%' . $_POST['search'] . '%)%20or%20(exploitdb_id%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)%20or%20(platform%20like%20%' . $_POST['search'] . '%)%20or%20(published_date%20like%20%' . $_POST['search'] . '%)%20or%20(cve%20like%20%' . $_POST['search'] . '%)%20or%20(cve_summary%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?filter=(_id%20like%20%' . $search . '%)%20or%20(application_name%20like%20%' . $search . '%)%20or%20(exploitdb_id%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(published_date%20like%20%' . $search . '%)%20or%20(cve%20like%20%' . $search . '%)%20or%20(cve_summary%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
+
 			foreach ($obj['resource'] as $key => $v) {
 				$data['findres'][$key]["Upload_Type"] = "Vulnerable Application";
 				$data['findres'][$key]["_id"] = $v['_id'];
@@ -175,7 +184,16 @@ else {
 					$data['findres'][$key]["vulnerable_configuration"] = $v['vulnerable_configuration'];
 				}
 				if(isset($v['file_path'])) {
-					$data['findres'][$key]["file_path"] = $v['file_path'];
+					if(isset($v['exploitdb_id'])) {
+						$data['searchres'][$key]["file"] = $v['file_path'];
+					} else {
+						$cmd = $s3->getCommand('GetObject', [
+							'Bucket' => 'pled_files',
+							'Key'    => 'vuln_applications/'.$v['file_path']
+						]);
+						$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+						$data['findres'][$key]['file'] = $signed_url->getUri();
+					}
 				}
 				if(isset($v['summary'])) {
 					$data['findres'][$key]["summary"] = $v['summary'];
@@ -185,9 +203,7 @@ else {
 				}
 			}
 			// ctf_challenges
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(name%20like%20%' . $_POST['search'] . '%)%20or%20(summary%20like%20%' . $_POST['search'] . '%)%20or%20(author%20like%20%' . $_POST['search'] . '%)%20or%20(port%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)%20or%20(category%20like%20%' . $_POST['search'] . '%)%20or%20(difficulty%20like%20%' . $_POST['search'] . '%)%20or%20(points%20like%20%' . $_POST['search'] . '%)%20or%20(walkthrough%20like%20%' . $_POST['search'] . '%)%20or%20(flag%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(author%20like%20%' . $search . '%)%20or%20(port%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(category%20like%20%' . $search . '%)%20or%20(difficulty%20like%20%' . $search . '%)%20or%20(points%20like%20%' . $search . '%)%20or%20(walkthrough%20like%20%' . $search . '%)%20or%20(flag%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
 			foreach ($obj['resource'] as $key => $v) {
 				$data['findres'][$key]["Upload_Type"] = "CTF Challenge";
 				$data['findres'][$key]['_id'] = $v['_id'];
@@ -225,11 +241,18 @@ else {
 				if(isset($v['flag'])) {
 					$data['findres'][$key]['flag'] = $v['flag'];
 				}
+				if(isset($v['file_path'])) {
+					$cmd = $s3->getCommand('GetObject', [
+						'Bucket' => 'pled_files',
+						'Key'    => 'ctf_challenges/'.$v['file_path']
+					]);
+					$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+					$data['findresres'][$key]['file'] = $signed_url->getUri();
+				}
 			}
 			// malware
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(name%20like%20%' . $_POST['search'] . '%)%20or%20(summary%20like%20%' . $_POST['search'] . '%)%20or%20(platform%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
+
 			foreach ($obj['resource'] as $key => $v) {
 				$data['findres'][$key]["Upload_Type"] = "Malware";
 				$data['findres'][$key]["_id"] = $v['_id'];
@@ -243,9 +266,18 @@ else {
 				if(isset($v['type'])) {
 					$data['findres'][$key]['type'] = $v['type'];
 				}
-				if(isset($v['date_added'])) {
-					$data['findres']['key']['date_added'] = $v['date_added'];
+				if(isset($v['added_date'])) {
+					$data['findres']['key']['added_date'] = $v['added_date'];
 				}
+				if(isset($v['file_path'])) {
+					$cmd = $s3->getCommand('GetObject', [
+						'Bucket' => 'pled_files',
+						'Key'    => 'malware/'.$v['file_path']
+					]);
+					$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+					$data['findres'][$key]['file'] = $signed_url->getUri();
+				}
+
 			}
 
 			$data['findquery'] = $_POST['search'];
@@ -257,10 +289,8 @@ else {
 		if ($_POST['from'] == "search") {
 			$data['searchres'] = [];
 
-			// vuln_applications
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(application_name%20like%20%' . $_POST['search'] . '%)%20or%20(exploitdb_id%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)%20or%20(platform%20like%20%' . $_POST['search'] . '%)%20or%20(published_date%20like%20%' . $_POST['search'] . '%)%20or%20(cve%20like%20%' . $_POST['search'] . '%)%20or%20(cve_summary%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?filter=(_id%20like%20%' . $search . '%)%20or%20(application_name%20like%20%' . $search . '%)%20or%20(exploitdb_id%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(published_date%20like%20%' . $search . '%)%20or%20(cve%20like%20%' . $search . '%)%20or%20(cve_summary%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
+			
 			foreach ($obj['resource'] as $key => $v) {
 				$data['searchres'][$key]["Upload_Type"] = "Vulnerable Application";
 				$data['searchres'][$key]["_id"] = $v['_id'];
@@ -294,7 +324,18 @@ else {
 					$data['searchres'][$key]["vulnerable_configuration"] = $v['vulnerable_configuration'];
 				}
 				if(isset($v['file_path'])) {
-					$data['searchres'][$key]["file_path"] = $v['file_path'];
+					if(isset($v['exploitdb_id'])) {
+						$data['searchres'][$key]["file"] = $v['file_path'];
+					} else {
+						$cmd = $s3->getCommand('GetObject', [
+							'Bucket' => 'pled_files',
+							'Key'    => 'vuln_applications/'.$v['file_path']
+						]);
+						$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+						$data['searchres'][$key]['file'] = $signed_url->getUri();
+					}
+
+					
 				}
 				if(isset($v['summary'])) {
 					$data['searchres'][$key]["summary"] = $v['summary'];
@@ -305,9 +346,8 @@ else {
 			}
 
 			// ctf_challenges
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(name%20like%20%' . $_POST['search'] . '%)%20or%20(summary%20like%20%' . $_POST['search'] . '%)%20or%20(author%20like%20%' . $_POST['search'] . '%)%20or%20(port%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)%20or%20(category%20like%20%' . $_POST['search'] . '%)%20or%20(difficulty%20like%20%' . $_POST['search'] . '%)%20or%20(points%20like%20%' . $_POST['search'] . '%)%20or%20(walkthrough%20like%20%' . $_POST['search'] . '%)%20or%20(flag%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(author%20like%20%' . $search . '%)%20or%20(port%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(category%20like%20%' . $search . '%)%20or%20(difficulty%20like%20%' . $search . '%)%20or%20(points%20like%20%' . $search . '%)%20or%20(walkthrough%20like%20%' . $search . '%)%20or%20(flag%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
+
 			foreach ($obj['resource'] as $key => $v) {
 				$data['searchres'][$key]["Upload_Type"] = "CTF Challenge";
 				$data['searchres'][$key]['_id'] = $v['_id'];
@@ -345,12 +385,19 @@ else {
 				if(isset($v['flag'])) {
 					$data['searchres'][$key]['flag'] = $v['flag'];
 				}
+				if(isset($v['file_path'])) {
+					$cmd = $s3->getCommand('GetObject', [
+						'Bucket' => 'pled_files',
+						'Key'    => 'ctf_challenges/'.$v['file_path']
+					]);
+					$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+					$data['searchres'][$key]['file'] = $signed_url->getUri();
+				}
 			}
 
 			// malware
-			$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?filter=(_id%20like%20%' . $_POST['search'] . '%)%20or%20(name%20like%20%' . $_POST['search'] . '%)%20or%20(summary%20like%20%' . $_POST['search'] . '%)%20or%20(platform%20like%20%' . $_POST['search'] . '%)%20or%20(type%20like%20%' . $_POST['search'] . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"];
-			$json = file_get_contents($url);
-			$obj = json_decode($json, true);
+			$obj = json_decode(file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$ini_array["api_key"]), true);
+
 			foreach ($obj['resource'] as $key => $v) {
 				$data['searchres'][$key]["Upload_Type"] = "Malware";
 				$data['searchres'][$key]["_id"] = $v['_id'];
@@ -364,8 +411,16 @@ else {
 				if(isset($v['type'])) {
 					$data['searchres'][$key]['type'] = $v['type'];
 				}
-				if(isset($v['date_added'])) {
-					$data['searchres']['key']['date_added'] = $v['date_added'];
+				if(isset($v['added_date'])) {
+					$data['searchres']['key']['added_date'] = $v['added_date'];
+				}
+				if(isset($v['file_path'])) {
+					$cmd = $s3->getCommand('GetObject', [
+						'Bucket' => 'pled_files',
+						'Key'    => 'malware/'.$v['file_path']
+					]);
+					$signed_url = $s3->createPresignedRequest($cmd, '+1 hour');
+					$data['searchres'][$key]['file'] = $signed_url->getUri();
 				}
 			}
 

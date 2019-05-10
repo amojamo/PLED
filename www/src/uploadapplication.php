@@ -111,8 +111,8 @@ foreach ($obj['resource'] as $key => $v) {
     if(isset($v['type'])) {
         $data['malware'][$key]["type"] = $v['type'];
     }
-    if(isset($v['date_added'])) {
-        $data['malware'][$key]["date_added"] = $v['date_added'];
+    if(isset($v['added_date'])) {
+        $data['malware'][$key]["added_date"] = $v['added_date'];
     }
 }
 
@@ -201,12 +201,16 @@ else {
 
     $files = [];
     $content = file_get_contents($_FILES['app_fileToUpload']['tmp_name']);
-    $filename = hash('md5', $_FILES['app_fileToUpload']['name'].date_timestamp_get(date_create()));
+    //$filename = hash('md5', $_FILES['app_fileToUpload']['name'].date_timestamp_get(date_create()));
+    //$path = $_FILES['app_fileToUpload']['name'];
+    //$fileext = pathinfo($path, PATHINFO_EXTENSION);
+    //$filename = $filename.'.'.$fileext;
+    $filename = uniqid().'_'.$_FILES['app_fileToUpload']['name'];
     array_push($files, $filename);
 
     try{
         $r = $s3->putObject([
-            'Bucket' => 'pled_files/vulnerable_applications',
+            'Bucket' => 'pled_files/vuln_applications',
             'Key' => $filename,
             'Body' => $content
         ]);
@@ -228,7 +232,7 @@ else {
                 $application_to_add->cwe = $json_data['cwe'];
                 $application_to_add->published_date = $json_data['Published'];
                 $application_to_add->impact = $json_data['impact'];
-                $application_to_add->vulnerable_configuration = $json_data['vulnerable_configuration'];
+                $application_to_add->vulnerable_configuration = $json_data['vulnerable_configuration_cpe_2_2'];
             }
         }
         

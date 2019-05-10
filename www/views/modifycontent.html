@@ -39,15 +39,7 @@
 		                        <input name="app_cve" placeholder="{{ placeholdercve }}" value="{{ res.cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="3" autofocus>
 		                        <input type="hidden" name="old_app_cve" value="{{ res.cve }}">
 		                    </fieldset>
-		                    <!-- SUBMIT BUTTON -->
-				            <fieldset>
-				                <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-				            </fieldset>
-
-				            <!-- DELETE BUTTON -->
-				            <fieldset>
-				                <button name="delete" type="delete" id="upload-delete" tabindex="8" formaction="">Delete object from database</button>
-				            </fieldset>
+		                    
 		                </div>
 		                <div class="second_column">
 	                        <!-- PLATFORM INPUT -->
@@ -176,6 +168,15 @@
 	            	</div>
 	            	<input type="hidden" name="upload_type" value="vuln_application">
 	            	<input type="hidden" name="_id" value="{{ res._id }}">
+	            	<!-- SUBMIT BUTTON -->
+		            <fieldset>
+		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+		            </fieldset>
+
+		            <!-- DELETE BUTTON -->
+		            <fieldset>
+		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=vuln_applications">Delete object from database</button>
+		            </fieldset>
 	            </form>
             </div>
 		{% elseif res.Upload_Type == "CTF Challenge" %}
@@ -259,15 +260,7 @@
 			                    </div>
 			                    <input type="hidden" name="old_challenge_difficulty" value="{{ res.difficulty }}">
 			                </fieldset>
-			                <!-- SUBMIT BUTTON -->
-				            <fieldset style="display: inline-block;">
-				                <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-				            </fieldset>
-
-				            <!-- DELETE BUTTON -->
-				            <fieldset style="display: inline-block;">
-				                <button name="delete" type="delete" id="upload-delete" tabindex="8" formaction="">Delete object from database</button>
-				            </fieldset>
+			                
 			            </div>
 			            <div class="second_column">
 			                 <!-- POINTS -->
@@ -294,6 +287,15 @@
 	            	</div>
 	            	<input type="hidden" name="upload_type" value="ctf_challenge">
 	            	<input type="hidden" name="_id" value="{{ res._id }}">
+	            	<!-- SUBMIT BUTTON -->
+		            <fieldset>
+		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+		            </fieldset>
+
+		            <!-- DELETE BUTTON -->
+		            <fieldset>
+		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=ctf_challenges">Delete object from database</button>
+		            </fieldset>
 	            </form>
 			</div>
 		{% elseif res.Upload_Type == "Malware" %}
@@ -320,15 +322,6 @@
 			                    <textarea name="malware_summary" placeholder="Malware Summary" tabindex="8">{{ res.summary }}</textarea>
 			                    <input type="hidden" name="old_malware_summary" value="{{ res.summary }}">
 			                </fieldset>
-			                <!-- SUBMIT BUTTON -->
-				            <fieldset style="display: inline-block;">
-				                <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-				            </fieldset>
-
-				            <!-- DELETE BUTTON -->
-				            <fieldset style="display: inline-block;">
-				                <button name="delete" type="delete" id="upload-delete" tabindex="8" formaction="">Delete object from database</button>
-				            </fieldset>
 	            		</div>
 	            		<div class="second_column">
 	            			<!-- PLATFORM INPUT -->
@@ -438,6 +431,15 @@
 	            	</div>
 	            	<input type="hidden" name="upload_type" value="malware">
 	            	<input type="hidden" name="_id" value="{{ res._id }}">
+	            	<!-- SUBMIT BUTTON -->
+		            <fieldset>
+		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+		            </fieldset>
+
+		            <!-- DELETE BUTTON -->
+		            <fieldset>
+		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=malware">Delete object from database</button>
+		            </fieldset>
 	            </form>
 	        </div>
 		{% endif %}
@@ -489,4 +491,19 @@
 			{% endif %}
 		{% endfor %}
 	{% endif %}
+
+
+	var deleteLinks = document.querySelectorAll('.delete');
+
+	for (var i = 0; i < deleteLinks.length; i++) {
+	  deleteLinks[i].addEventListener('click', function(event) {
+	      event.preventDefault();
+
+	      var choice = confirm(this.getAttribute('data-confirm'));
+
+	      if (choice) {
+	        window.location.href = this.getAttribute('formaction');
+	      }
+	  });
+	}
 </script>

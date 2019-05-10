@@ -74,9 +74,7 @@ if($_POST['upload_type'] == "vuln_application") {
 	$malware_to_modify = json_decode('{}');
 	if(!empty($_POST['malware_name']))
 		$malware_to_modify->name = $_POST['malware_name'];
-	//if(!empty($_POST['malware_summary'])) {
-		$malware_to_modify->summary = $_POST['malware_summary'];
-	}
+	$malware_to_modify->summary = $_POST['malware_summary'];
 	$malware_to_modify->platform = $_POST['malware_platform'];
 	$malware_to_modify->type = $_POST['malware_type'];
 

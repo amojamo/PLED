@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>First time setup</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>First Time Setup</h2>
+  <p>NB: This is for setting up the website for the first time</p>
+  <p>If an error occurs, go into the docker container and remove or edit the phpconfig.ini file</p>
+  <p>For more info on how to get the values, go to <a href="https://project.ncr.ntnu.no/w/pled/howtos/database_web_interface_setup/">NCR wiki</a></p>
+  <form action="/index.php" method="POST">
+    <div class="form-group">
+      <label for="apikey">API key:</label>
+      <input type="text" class="form-control" id="email" placeholder="API key from dreamfactor" name="apikey" required>
+    </div>
+    <div class="form-group">
+      <label for="s3key">S3 Key:</label>
+      <input type="text" class="form-control" id="s3key" placeholder="Key identifier for S3 secret" name="s3key" required>
+    </div>
+    <div class="form-group">
+        <label for="s3secret">S3 Secret:</label>
+        <input type="password" class="form-control" id="s3secret" placeholder="S3 secret" name="s3secret" required>
+    </div>
+    <div class="form-group">
+        <label for="s3region">S3 Region:</label>
+        <input type="text" class="form-control" id="s3region" value="SkyHiGh" name="s3region" required>
+    </div>
+    <div class="form-group">
+        <label for="s3endpoit">S3 Endpoint URL:</label>
+        <input type="url" class="form-control" id="s3endpoint" placeholder="endpoint URL for storage" name="s3endpoint" required>
+    </div>
+    <button name="generateConfig" type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
+
+</body>
+</html>
+

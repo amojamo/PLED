@@ -114,8 +114,8 @@ foreach ($obj['resource'] as $key => $v) {
     if(isset($v['type'])) {
         $data['malware'][$key]["type"] = $v['type'];
     }
-    if(isset($v['date_added'])) {
-        $data['malware'][$key]["date_added"] = $v['date_added'];
+    if(isset($v['added_date'])) {
+        $data['malware'][$key]["added_date"] = $v['added_date'];
     }
 }
 
@@ -195,7 +195,8 @@ else {
     **/
     $files = [];
     $content = file_get_contents($_FILES['challenge_fileToUpload']['tmp_name']);
-    $filename = hash('md5', $_FILES['challenge_fileToUpload']['name'].date_timestamp_get(date_create()));
+    //$filename = hash('md5', $_FILES['challenge_fileToUpload']['name'].date_timestamp_get(date_create()));
+    $filename = uniqid().'_'.$_FILES['challenge_fileToUpload']['name'];
     array_push($files, $filename);
 
     try{
@@ -247,8 +248,9 @@ else {
         $body = json_encode($resource, true);
 
         $ch = curl_init();
+        $dfapikey = 'X-DreamFactory-API-Key:'.$ini_array["api_key"];
         $options = array(CURLOPT_URL => 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges/',
-                         CURLOPT_HTTPHEADER => array('X-DreamFactory-API-Key: c585d342e289fe06b314e202d4f4bae1405ea43004291da4becbdedbb75e8781',
+                         CURLOPT_HTTPHEADER => array($dfapikey,
                                                     'Content-Type: application/json'),
                          CURLOPT_POST => 1,
                          CURLOPT_POSTFIELDS => $body,

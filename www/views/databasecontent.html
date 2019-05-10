@@ -63,8 +63,10 @@
 
 			  	{% if res.impact %}
 			  		<b>Impact: </b>
-			  		{{ res.impact | json_encode }}<br>
-			  	{% endif %}
+					{% for key, impact in res.impact %}<br>
+						{{ key }}: {{ impact | e }}
+					{% endfor %}  
+			  	{% endif %}<br>
 
 			  	{% if res.vulnerable_configuration %}
 			  		<b>Vulnerable Configuration: </b>
@@ -72,11 +74,9 @@
 			  			{{ vc | json_encode }}<br>
 			  		{% endfor %}
 			  	{% endif %}
-
-			  	{% if res.file_path %}
-			  		<b>File Path: </b>
-			  		{{ res.file_path }}<br>
-			  	{% endif %}
+				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
+				
+				  
 		</div>
 		{% elseif res.Upload_Type == "CTF Challenge" %}
 			<button class="collapsible">
@@ -135,6 +135,7 @@
 					<b>Flag: </b>
 					{{ res.flag }}<br>
 				{% endif %}
+				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
 			</div>
 		{% elseif res.Upload_Type == "Malware" %}
 			<button class="collapsible">
@@ -168,6 +169,7 @@
 					<b>Date added: </b>
 					{{ res.date_added }}<br>
 				{% endif %}
+				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
 			</div>
 		{% endif %}
 	{% endfor %}
@@ -226,15 +228,19 @@
 		  		{{ application.cwe }}<br>
 		  	{% endif %}
 
-		  	{% if application.impact %}
-		  		<b>Impact: </b>
-		  		{{ application.impact | json_encode }}<br>
-		  	{% endif %}
+			{% if application.impact %}
+			  <b>Impact: </b>
+				{% for key, impact in application.impact %}<br>
+					{{ key }}: {{ impact | e }}
+				{% endfor %}  
+		  	{% endif %}<br>
 
-		  	{% if application.vulnerable_configuration %}
-		  		<b>Vulnerable Configuration: </b>
-		  		{{ application.vulnerable_configuration |join(',') }}<br>
-		  	{% endif %}
+			{% if application.vulnerable_configuration %}
+				<b>Vulnerable Configuration: </b>
+				{% for vc in application.vulnerable_configuration %}
+					{{ vc | json_encode }}<br>
+				{% endfor %}
+			{% endif %}
 
 		  	{% if application.file_path %}
 		  		<b>File Path: </b>
@@ -244,7 +250,8 @@
 		  	{% if application.category %}
 		  		<b>Category: </b>
 		  		{{ application.category }}<br>
-		  	{% endif %}
+			  {% endif %}
+			  <button onclick="window.location.href='{{ application.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
 		</div>
 	{% endfor %}
 	<br><br>
@@ -308,7 +315,9 @@
 			{% if ctf_challenge.flag %}
 				<b>Flag: </b>
 				{{ ctf_challenge.flag }}<br>
+				PATH: {{ ctf_challenge.file_path }}
 			{% endif %}
+			<button onclick="window.location.href='{{ ctf_challenge.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
 		</div>
 	{% endfor %}
 	<br>
@@ -344,6 +353,8 @@
 				<b>Date added: </b>
 				{{ mw.date_added }}<br>
 			{% endif %}
+			<button onclick="window.location.href='{{ mw.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
+
 		</div>
 	{% endfor %}
 	<br>

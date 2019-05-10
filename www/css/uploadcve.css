@@ -122,7 +122,7 @@ fieldset {
     height: 40px;
 }
 
-#formstyle button[type="submit"] {
+.submit {
     cursor: pointer;
     max-width: 400px;
     border: none;
@@ -135,7 +135,7 @@ fieldset {
     height: 45px;
 }
 
-#formstyle button[type="delete"] {
+.delete {
     cursor: pointer;
     max-width: 400px;
     border: none;
@@ -168,12 +168,10 @@ fieldset {
 
 .first_column {
     grid-column: 1/2;
-    margin-top: 40px;
 }
 
 .second_column {
     grid-column: 2/3;
-    margin-top: 40px;
 }
 
 .search {

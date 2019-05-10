@@ -1,9 +1,8 @@
 <form id="formstyle" action="../src/uploadchallenge.php" method="post" enctype="multipart/form-data">
     <div id="challengeform" class="challengeform">
+        <div class="errmsg">{{ err_challenge_msg }}</div>
         <div class="grid">
             <div class="first_column" style="margin-top: 40px;">
-                <div class="errmsg">{{ err_challenge_msg }}</div>
-                <br>
                 <!-- CHALLENGE NAME INPUT -->
                 <div type="text">Challenge Name *</div>
                 {% if err_challenge_name %}
@@ -36,6 +35,12 @@
                     <input type="text" name="challenge_creation_date" placeholder="Date of creation" value="{{ challenge_creation_date }}" pattern="([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}" tabindex="5" autofocus>
                 </fieldset>
 
+                <!-- PORT -->
+                <div type="text">Port (digits only)</div>
+                <fieldset>
+                    <input type="text" name="challenge_port" value="{{ challenge_port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
+                </fieldset>
+
                 <!-- FILE INPUT -->
                 <div type="text">Docker File *</div>
                 {% if err_challenge_file %}
@@ -50,39 +55,18 @@
                     </fieldset>
                 {% endif %}
 
-                <!-- PORT -->
-                <div type="text">Port (digits only)</div>
-                <fieldset>
-                    <input type="text" name="challenge_port" value="{{ challenge_port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
-                </fieldset>
 
                  <!-- SUBMIT BUTTON -->
                 <fieldset>
-                    <button name="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="13   ">Submit to database</button>
+                    <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="13   ">Submit to database</button>
                 </fieldset>
             </div>
-            <div class="second_column"><br>
+            <div class="second_column" style="margin-top: 40px;">
                 <!-- TYPE INPUT -->
                  <div type="text">Type</div>
-                {% if errtype %}
-                <fieldset>
-                    <div class="{{ errtype }}">
-                        <fieldset>
-                            <div class="select">
-                                <select name="challenge_type" id="c_type" class="dropdown" tabindex="3"selected="{{ challenge_type }}">
-                                    <option value="other">---</option>
-                                    <option value="jeopardy">Jeopardy</option>
-                                    <option value="attack-defence">Attack-Defence</option>
-                                    <option value="mixed">Mixed</option>
-                                </select>
-                            </div>
-                        </fieldset>
-                    </div>
-                </fieldset>
-                {% else %}
                 <fieldset>
                     <div class="select">
-                        <select name="challenge_type" id="type" class="dropdown" tabindex="3" selected="{{ challenge_type }}">
+                        <select name="challenge_type" id="c_type" class="dropdown" tabindex="3" selected="{{ challenge_type }}">
                             <option value="other">---</option>
                             <option value="jeopardy">Jeopardy</option>
                             <option value="attack-defence">Attack-Defence</option>
@@ -90,7 +74,6 @@
                         </select>
                     </div>
                 </fieldset>
-                {% endif %}
 
                 <!-- CHALLENGE CATEGORY INPUT -->
                 <div type="text">Category</div>
