@@ -11,7 +11,7 @@ if(isset($_POST['generateConfig'])) {
 	$ip = getenv('DF_ADDR', true) ?: getenv('DF_ADDR');
 	$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
 	$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
-			'ip = '.$ip.PHP_EOL.
+			'ip = '.$_POST['apiurl'].PHP_EOL.
 			's3_key = '.$_POST['s3key'].PHP_EOL.
 			's3_secret = '.$_POST['s3secret'].PHP_EOL.
 			's3_region = '.$_POST['s3region'].PHP_EOL.
