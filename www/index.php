@@ -8,29 +8,25 @@ $twig = new Twig_Environment($loader, array());
 
 if(isset($_POST['generateConfig'])) {
 	$ip = $_POST['apiurl'];
-	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	$validated = aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ini_array['ip']);
+
+	if (!$validated){
+
 		header('WWW-Authenticate: Basic realm="PLED"');
 		header('HTTP/1.0 401 Unauthorized');
-		echo 'Unauthorized';
-		exit;
-	} else {
-			if(aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ip)) {
-				$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
-				$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
-						'ip = '.$_POST['apiurl'].PHP_EOL.
-						's3_key = '.$_POST['s3key'].PHP_EOL.
-						's3_secret = '.$_POST['s3secret'].PHP_EOL.
-						's3_region = '.$_POST['s3region'].PHP_EOL.
-						's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL;
-				fwrite($file, $data);
-				fclose($file);
-				header("Location: index.php");
-			} else {
-				unset($_SERVER['PHP_AUTH_USER']);
-				unset($_SERVER['PHP_AUTH_PW']);
-				die('Unauthorized');
-			}
+		die('1Unauthorized');
 	}
+	$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
+	$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
+			'ip = '.$_POST['apiurl'].PHP_EOL.
+			's3_key = '.$_POST['s3key'].PHP_EOL.
+			's3_secret = '.$_POST['s3secret'].PHP_EOL.
+			's3_region = '.$_POST['s3region'].PHP_EOL.
+			's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL;
+	fwrite($file, $data);
+	fclose($file);
+	header("Location: index.php");
+
 	
 }
 
@@ -41,16 +37,16 @@ if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
 	die();
 }
 
+//Authenticate in Dreamfactory with username and password
 $validated = aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ini_array['ip']);
 
 if (!$validated){
-	//User pressed cancel
+
 	header('WWW-Authenticate: Basic realm="PLED"');
 	header('HTTP/1.0 401 Unauthorized');
 	die('1Unauthorized');
-//Authenticate in Dreamfactory with username and password
 } 
-
+//User arrives here if authenticated
 
 $s3 = include 'src/openstack/openstack.php';
 
