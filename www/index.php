@@ -6,19 +6,32 @@ use Aws\Exception\AwsException;
 $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
 
-
 if(isset($_POST['generateConfig'])) {
-	$ip = getenv('DF_ADDR', true) ?: getenv('DF_ADDR');
-	$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
-	$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
-			'ip = '.$_POST['apiurl'].PHP_EOL.
-			's3_key = '.$_POST['s3key'].PHP_EOL.
-			's3_secret = '.$_POST['s3secret'].PHP_EOL.
-			's3_region = '.$_POST['s3region'].PHP_EOL.
-			's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL;
-	fwrite($file, $data);
-	fclose($file);
-	header("Location: index.php");
+	$ip = $_POST['apiurl'];
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+		header('WWW-Authenticate: Basic realm="PLED"');
+		header('HTTP/1.0 401 Unauthorized');
+		echo 'Unauthorized';
+		exit;
+	} else {
+			if(aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ip)) {
+				$file = fopen($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini", 'w');
+				$data = 'api_key = '.$_POST['apikey'].PHP_EOL.
+						'ip = '.$_POST['apiurl'].PHP_EOL.
+						's3_key = '.$_POST['s3key'].PHP_EOL.
+						's3_secret = '.$_POST['s3secret'].PHP_EOL.
+						's3_region = '.$_POST['s3region'].PHP_EOL.
+						's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL;
+				fwrite($file, $data);
+				fclose($file);
+				header("Location: index.php");
+			} else {
+				unset($_SERVER['PHP_AUTH_USER']);
+				unset($_SERVER['PHP_AUTH_PW']);
+				die('Unauthorized');
+			}
+	}
+	
 }
 
 if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
@@ -28,12 +41,15 @@ if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
 	die();
 }
 
+$validated = aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ini_array['ip']);
 
-
-
-
-
-
+if (!$validated){
+	//User pressed cancel
+	header('WWW-Authenticate: Basic realm="PLED"');
+	header('HTTP/1.0 401 Unauthorized');
+	die('1Unauthorized');
+//Authenticate in Dreamfactory with username and password
+} 
 
 
 $s3 = include 'src/openstack/openstack.php';
@@ -184,4 +200,27 @@ foreach ($obj['resource'] as $key => $v) {
 }
 
 echo $twig->render('databaseManagementPage.html', $data);
+
+function aunthenticate($username, $password, $ip) {
+	$username = urlencode($username);
+	$ch = curl_init();
+	$options = array(CURLOPT_URL => 'http://'.$username.':'.$password.'@'.$ip.'/api/v2/mongodb/', 
+		CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+		CURLOPT_CUSTOMREQUEST => 'GET',
+		CURLOPT_RETURNTRANSFER => true
+		);
+	
+	curl_setopt_array($ch, $options);
+	// Send the request
+	$response = curl_exec($ch);
+	$obj = json_decode($response, true);
+    // Check for errors
+	if (isset($obj['error'])) {
+		return false;
+	} else {
+		return true;
+	}
+
+
+}
 ?>
