@@ -62,10 +62,15 @@ if(isset($_GET['deleted'])) {
 
 // Get contents from database '.$ini_array["ip"].'
 // Vuln_applications
-$json = file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"]);
-$obj = json_decode($json, true);
-$data['vuln_applications'] = [];
-if ($json) {
+$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
+//Check if the url is reachable, if the collection exists
+$headers = get_headers($url);
+$exists = stripos($headers[0], "200 OK")?true:false;
+//If exists get data
+if($exists) {
+	$json = file_get_contents($url);
+	$obj = json_decode($json, true);
+	$data['vuln_applications'] = [];
 	foreach ($obj['resource'] as $key => $v) {
 		$data['vuln_applications'][$key]["_id"] = $v['_id'];
 		$data['vuln_applications'][$key]["application_name"] = $v['application_name'];
@@ -117,11 +122,17 @@ if ($json) {
 		}
 	}
 }
+
 // ctf_challenges
-$json = file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"]);
+$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
+//Check if the url is reachable, if the collection exists
+$headers = get_headers($url);
+$exists = stripos($headers[0], "200 OK")?true:false;
+//If exists get data
+if($exists) {
+$json = file_get_contents($url);
 $obj = json_decode($json, true);
 $data['ctf_challenges'] = [];
-if ($json) {
 	foreach ($obj['resource'] as $key => $v) {
 		$data['ctf_challenges'][$key]["_id"] = $v['_id'];
 		$data['ctf_challenges'][$key]["name"] = $v['name'];
@@ -169,10 +180,15 @@ if ($json) {
 	}
 }
 // Malware
-$json = file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"]);
-$obj = json_decode($json, true);
-$data['malware'] = [];
-if ($json) {
+$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
+//Check if the url is reachable, if the collection exists
+$headers = get_headers($url);
+$exists = stripos($headers[0], "200 OK")?true:false;
+//If exists get data
+if($exists) {
+	$json = file_get_contents($url);
+	$obj = json_decode($json, true);
+	$data['malware'] = [];
 	foreach ($obj['resource'] as $key => $v) {
 		$data['malware'][$key]["_id"] = $v["_id"];
 		$data['malware'][$key]["name"] = $v["name"];
