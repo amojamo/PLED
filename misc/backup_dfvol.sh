@@ -1,4 +1,4 @@
 #!/bin/bash
 now=`date +"%Y_%m_%d"`
 filename=backupdf_vol_$now.tar
-sudo /bin/tar -zcf "/backup/dfbackup/$filename" /bitnami/
+sudo /bin/tar -zcf "/home/backupbot/backup/dfbackup/$filename" /bitnami/
