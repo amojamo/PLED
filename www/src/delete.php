@@ -13,7 +13,7 @@ $json = file_get_contents('http://'.$ini_array["ip"].'/api/v2/mongodb/_table/'.$
 $file_path = json_decode($json, true);
 
 $ch = curl_init();
-$options = array(CURLOPT_URL => 'http://10.212.137.92/api/v2/mongodb/_table/'.$_GET['type'].'/'.$_GET['id'], 
+$options = array(CURLOPT_URL => 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/'.$_GET['type'].'/'.$_GET['id'], 
 	CURLOPT_HTTPHEADER => array($dfapikey, 'Content-Type: application/json'),
 	CURLOPT_CUSTOMREQUEST => 'DELETE'
     );

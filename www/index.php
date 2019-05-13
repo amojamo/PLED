@@ -5,6 +5,7 @@ use Aws\Exception\AwsException;
 //phpinfo();	
 $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
+$collections = array('vuln_applications', 'ctf_challenges', 'malware');
 
 if(isset($_POST['generateConfig'])) {
 	$ip = $_POST['apiurl'];
@@ -60,15 +61,19 @@ if(isset($_GET['deleted'])) {
 	$data['deleted'] = $_GET['deleted'];
 }
 
-// Get contents from database '.$ini_array["ip"].'
+//Go through the collections and check that they are in the database
+$url = [];
+$exists = [];
+foreach($collections as $collection) {
+	$url[$collection] = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
+	$headers = get_headers($url[$collection]);
+	$exists[$collection] = stripos($headers[0], "200 OK")?true:false;
+}
+
 // Vuln_applications
-$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
-//Check if the url is reachable, if the collection exists
-$headers = get_headers($url);
-$exists = stripos($headers[0], "200 OK")?true:false;
 //If exists get data
-if($exists) {
-	$json = file_get_contents($url);
+if($exists['vuln_applications']) {
+	$json = file_get_contents($url['vuln_applications']);
 	$obj = json_decode($json, true);
 	$data['vuln_applications'] = [];
 	foreach ($obj['resource'] as $key => $v) {
@@ -124,13 +129,8 @@ if($exists) {
 }
 
 // ctf_challenges
-$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
-//Check if the url is reachable, if the collection exists
-$headers = get_headers($url);
-$exists = stripos($headers[0], "200 OK")?true:false;
-//If exists get data
-if($exists) {
-$json = file_get_contents($url);
+if($exists['ctf_challenges']) {
+$json = file_get_contents($url['ctf_challenges']);
 $obj = json_decode($json, true);
 $data['ctf_challenges'] = [];
 	foreach ($obj['resource'] as $key => $v) {
@@ -180,13 +180,8 @@ $data['ctf_challenges'] = [];
 	}
 }
 // Malware
-$url = 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/malware?limit=4&order=_id%20DESC&api_key='.$ini_array["api_key"];
-//Check if the url is reachable, if the collection exists
-$headers = get_headers($url);
-$exists = stripos($headers[0], "200 OK")?true:false;
-//If exists get data
-if($exists) {
-	$json = file_get_contents($url);
+if($exists['malware']) {
+	$json = file_get_contents($url['malware']);
 	$obj = json_decode($json, true);
 	$data['malware'] = [];
 	foreach ($obj['resource'] as $key => $v) {
