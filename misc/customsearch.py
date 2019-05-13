@@ -13,7 +13,7 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
 if resource =="":
     result = {'resource':['platform', 'type']}
 elif resource =="platform" or resource =="type":
-    url = 'mongodb/_table/vuln_applications_edb'
+    url = 'mongodb/_table/vuln_applications'
     result = platform.api.get(url)
     data = result.read()
     jsonData = json.loads(data)
