@@ -148,7 +148,7 @@ else {
         $body = json_encode($resource, true);
         $res = $api->insert($body, 'ctf_challenges');
         $obj = json_decode($res['response'], true);
-
+        
         if($res['response'] === FALSE){
             die($res['error']);
             $data['error'] = 'dferror';
@@ -156,7 +156,7 @@ else {
         }
 
         // TODO Find do error handling on response code.
-        if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200) && (!$r['DeleteMarker'])) {
+        if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200)) {
             $data['uploaded'] = 'false';
         } else {
             $data['uploaded'] = 'true';
