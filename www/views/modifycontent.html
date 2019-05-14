@@ -7,442 +7,423 @@
 	</div>
 </form><br>
 {% if findres %}
-<h5>{{ findres | length }} results for search '{{ findquery }}'</h5>
-	{% for res in findres %}
-		{% if res.Upload_Type == "Vulnerable Application" %}
-			<button class="collapsibleform">
-				<b>Upload Type: </b>{{ res.Upload_Type }} <br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.application_name }}<br>
-				<b>CVE:</b> {{ res.cve }}<br>
-			</button>
-			<div class="content">
-				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
-					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br>
-					<div class="grid">       
-	            		<div class="first_column">
- 	            			<!-- APPLICATON NAME INPUT -->
-                			<div type="text">Application Name</div>
-	            			<fieldset>
-			                    <input name="app_name" placeholder="Application Name" value="{{ res.application_name }}" type="text" tabindex="1" autofocus>
-			                    <input type="hidden" name="old_app_name" value="{{ res.application_name }}">
-			                </fieldset>
-			                <!-- APPLICATION SUMMARY INPUT -->
-			                <div type="text">Application Summary</div>
-			                <fieldset>
-			                    <textarea name="app_summary" placeholder="Application Summary" tabindex="2">{{ res.summary }}</textarea>
-			                    <input type="hidden" name="old_app_summary" value="{{ res.summary }}">
-			                </fieldset>
-			                <!-- CVE-ID INPUT -->
-                			<div type="text">CVE-ID (CVE-YYYY-XXXX)</div>
-                			<fieldset>
-		                        <input name="app_cve" placeholder="{{ placeholdercve }}" value="{{ res.cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="3" autofocus>
-		                        <input type="hidden" name="old_app_cve" value="{{ res.cve }}">
-		                    </fieldset>
-		                    
-		                </div>
-		                <div class="second_column">
-	                        <!-- PLATFORM INPUT -->
-                			<div type="text">Platform</div>
-                			<fieldset>
-		                        <div class="select">
-		                            <select name="app_platform" id="app_platform_{{ res._id }}" class="dropdown" tabindex="5">
-		                                <option value="any">---</option>
-		                                <option value="aix">AIX</option>
-		                                <option value="alpha">Alpha</option>
-		                                <option value="android">Android</option>
-		                                <option value="arm">ARM</option>
-		                                <option value="ashx">ASHX</option>
-		                                <option value="asp">ASP</option>
-		                                <option value="aspx">ASPX</option>
-		                                <option value="atheos">AtheOS</option>
-		                                <option value="beos">BeOS</option>
-		                                <option value="bsd">BSD</option>
-		                                <option value="bsdi_x86">BSDi_x86</option>
-		                                <option value="bsd_ppc">BSD_PPC</option>
-		                                <option value="bsd_x86">BSD_x86</option>
-		                                <option value="cfm">CFM</option>
-		                                <option value="cgi">CGI</option>
-		                                <option value="ezine">eZine</option>
-		                                <option value="freeBSD">FreeBSD</option>
-		                                <option value="freebsd_x86">FreeBSD_x86</option>
-		                                <option value="freebsd_x86-64">FreeBSD_x86-64</option>
-		                                <option value="generator">Generator</option>
-		                                <option value="hardware">hardware</option>
-		                                <option value="hp-ux">HP-UX</option>
-		                                <option value="immunix">Immunix</option>
-		                                <option value="ios">iOS</option>
-		                                <option value="irix">IRIX</option>
-		                                <option value="java">Java</option>
-		                                <option value="json">JSON</option>
-		                                <option value="jsp">JSP</option>
-		                                <option value="linux">Linux</option>
-		                                <option value="linux_crisv32">Linux_CRISv32</option>
-		                                <option value="linux_mips">Linux_MIPS</option>
-		                                <option value="linux_PPC">Linux_PPC</option>
-		                                <option value="linux_sparc">Linux_SPARC</option>
-		                                <option value="linux_x86">Linux_x86</option>
-		                                <option value="linux_x86-64">Linux_x86-64</option>
-		                                <option value="lua">Lua</option>
-		                                <option value="macos">macOS</option>
-		                                <option value="magazine">Magazine</option>
-		                                <option value="minix">MINIX</option>
-		                                <option value="multiple">Multiple</option>
-		                                <option value="netbsd_x86">NetBSD_x86</option>
-		                                <option value="netware">Netware</option>
-		                                <option value="nodeJS">NodeJS</option>
-		                                <option value="novell">Novell</option>
-		                                <option value="openbsd">OpenBSD</option>
-		                                <option value="openbsd_x86">openBSD_x86</option>
-		                                <option value="osx">OSX</option>
-		                                <option value="osx_ppc">OSX_PPC</option>
-		                                <option value="palm_os">Palm_OS</option>
-		                                <option value="perl">Perl</option>
-		                                <option value="php">PHP</option>
-		                                <option value="plan9">Plan9</option>
-		                                <option value="python">Python</option>
-		                                <option value="qnx">QNX</option>
-		                                <option value="ruby">Ruby</option>
-		                                <option value="sco">SCO</option>
-		                                <option value="sco_x86">SCO_x86</option>
-		                                <option value="solaris">Solaris</option>
-		                                <option value="solaris_mips">Solaris_MIPS</option>
-		                                <option value="solaris_sparc">Solaris_SPARC</option>
-		                                <option value="solaris_x86">Solaris_x86</option>
-		                                <option value="superh_sh4">SuperH_SH4</option>
-		                                <option value="system_z">System_z</option>
-		                                <option value="tru64">Tru64</option>
-		                                <option value="ultrix">ULTRIX</option>
-		                                <option value="unix">Unix</option>
-		                                <option value="unixware">UnixWare</option>
-		                                <option value="windows">Windows</option>
-		                                <option value="windows_x86">Windows_x86</option>
-		                                <option value="windows_x86-64">Windows_x86-64</option>
-		                                <option value="xml">XML</option>
-		                            </select>
-		                        </div>
-		                        <input type="hidden" name="old_app_platform" value="{{ res.platform }}">
-		                    </fieldset>
-		                    <!-- TAG INPUT -->
-               		 		<div type="text">Tag</div>
-               		 		<fieldset>
-			                    <div class="select">
-			                        <select name="app_tag" id="app_tag_{{ res._id }}" class="dropdown" tabindex="6">
-			                            <option value="none">---</option>
-			                            <option value="authentication buypass / credidentials buypass (ab/cb)">Authentication Buypass / Credidentials Buypass (AB/CB)</option>
-			                            <option value="buffer overflow">Buffer Overflow</option>
-			                            <option value="bug report">Bug Report</option>
-			                            <option value="client side">Client Side</option>
-			                            <option value="code injection">Code Injection</option>
-			                            <option value="command injection">Command Injection</option>
-			                            <option value="console">Console</option>
-			                            <option value="cross-site request forgery (CSRF)">Cross-Site Request Forgery (CSRF)</option>
-			                            <option value="cross-site scripting (XSS)">Cross-Site Scripting (XSS)</option>
-			                            <option value="denial of service (dos)">Denial of Service (DoS)</option>
-			                            <option value="deserialization">Deserialization</option>
-			                            <option value="file inclusion (LFI/RFI)">File Inclusion (LFI/RFI)</option>
-			                            <option value="heap overflow">Heap Overflow</option>
-			                            <option value="integer overflow">Integer Overflow</option>
-			                            <option value="local">Local</option>
-			                            <option value="malware">Malware</option>
-			                            <option value="metasploit framework (msf)">Metasploit Framework (MSF)</option>
-			                            <option value="null pointer dereference">NULL Pointer Dereference</option>
-			                            <option value="object injection">Object Injection</option>
-			                            <option value="out of bounds">Out Of Bounds</option>
-			                            <option value="pwn2own">Pwn2Own</option>
-			                            <option value="race condition">Race Condition</option>
-			                            <option value="remote">Remote</option>
-			                            <option value="server-side request forgery">Server-Side Request Forgery (SSRF)</option>
-			                            <option value="sql injection (sqli)">SQL Injection (SQLi)</option>
-			                            <option value="traversal">Traversal</option>
-			                            <option value="type confusion">Type Confusion</option>
-			                            <option value="use after free (uaf)">Use After Free (UAF)</option>
-			                            <option value="wordpress core">WordPress Core</option>
-			                            <option value="wordpress plugin">WordPress Plugin</option>
-			                            <option value="xml external entity (xxe)">XML External Entity (XXE)</option>
-			                        </select>
-			                    </div>
-			                    <input type="hidden" name="old_app_tag" value="{{ res.tag }}">
-			                </fieldset>
-	            		</div>
-	            	</div>
-	            	<input type="hidden" name="upload_type" value="vuln_application">
-	            	<input type="hidden" name="_id" value="{{ res._id }}">
-	            	<!-- SUBMIT BUTTON -->
-		            <fieldset>
-		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-		            </fieldset>
+<h5>{{ findres.vuln_applications | length + findres.ctf_challenges | length + findres.malware | length }} results for search '{{ findquery }}'</h5>
+	{% for res in findres.vuln_applications %}
+		<button class="collapsibleform">
+			<b>Upload Type: </b>Vulnerable Application <br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.application_name }}<br>
+			<b>CVE:</b> {{ res.cve }}<br>
+		</button>
+		<div class="content">
+			<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
+				<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br>
+				<div class="grid">       
+					<div class="first_column">
+						<!-- APPLICATON NAME INPUT -->
+						<div type="text">Application Name</div>
+						<fieldset>
+							<input name="app_name" placeholder="Application Name" value="{{ res.application_name }}" type="text" tabindex="1" autofocus required>
+						</fieldset>
+						<!-- APPLICATION SUMMARY INPUT -->
+						<div type="text">Application Summary</div>
+						<fieldset>
+							<textarea name="app_summary" placeholder="Application Summary" tabindex="2">{{ res.summary }}</textarea>
+						</fieldset>
+						<!-- CVE-ID INPUT -->
+						<div type="text">CVE-ID (CVE-YYYY-XXXX)</div>
+						<fieldset>
+							<input name="app_cve" placeholder="{{ placeholdercve }}" value="{{ res.cve }}" pattern="CVE-\d{4}-\d{4,7}" type="text" tabindex="3" autofocus>
+							</fieldset>
+						
+					</div>
+					<div class="second_column">
+						<!-- PLATFORM INPUT -->
+						<div type="text">Platform</div>
+						<fieldset>
+							<div class="select">
+								<select name="app_platform" id="app_platform_{{ res._id }}" class="dropdown" tabindex="5">
+									<option value="any">---</option>
+									<option value="aix">AIX</option>
+									<option value="alpha">Alpha</option>
+									<option value="android">Android</option>
+									<option value="arm">ARM</option>
+									<option value="ashx">ASHX</option>
+									<option value="asp">ASP</option>
+									<option value="aspx">ASPX</option>
+									<option value="atheos">AtheOS</option>
+									<option value="beos">BeOS</option>
+									<option value="bsd">BSD</option>
+									<option value="bsdi_x86">BSDi_x86</option>
+									<option value="bsd_ppc">BSD_PPC</option>
+									<option value="bsd_x86">BSD_x86</option>
+									<option value="cfm">CFM</option>
+									<option value="cgi">CGI</option>
+									<option value="ezine">eZine</option>
+									<option value="freeBSD">FreeBSD</option>
+									<option value="freebsd_x86">FreeBSD_x86</option>
+									<option value="freebsd_x86-64">FreeBSD_x86-64</option>
+									<option value="generator">Generator</option>
+									<option value="hardware">hardware</option>
+									<option value="hp-ux">HP-UX</option>
+									<option value="immunix">Immunix</option>
+									<option value="ios">iOS</option>
+									<option value="irix">IRIX</option>
+									<option value="java">Java</option>
+									<option value="json">JSON</option>
+									<option value="jsp">JSP</option>
+									<option value="linux">Linux</option>
+									<option value="linux_crisv32">Linux_CRISv32</option>
+									<option value="linux_mips">Linux_MIPS</option>
+									<option value="linux_PPC">Linux_PPC</option>
+									<option value="linux_sparc">Linux_SPARC</option>
+									<option value="linux_x86">Linux_x86</option>
+									<option value="linux_x86-64">Linux_x86-64</option>
+									<option value="lua">Lua</option>
+									<option value="macos">macOS</option>
+									<option value="magazine">Magazine</option>
+									<option value="minix">MINIX</option>
+									<option value="multiple">Multiple</option>
+									<option value="netbsd_x86">NetBSD_x86</option>
+									<option value="netware">Netware</option>
+									<option value="nodeJS">NodeJS</option>
+									<option value="novell">Novell</option>
+									<option value="openbsd">OpenBSD</option>
+									<option value="openbsd_x86">openBSD_x86</option>
+									<option value="osx">OSX</option>
+									<option value="osx_ppc">OSX_PPC</option>
+									<option value="palm_os">Palm_OS</option>
+									<option value="perl">Perl</option>
+									<option value="php">PHP</option>
+									<option value="plan9">Plan9</option>
+									<option value="python">Python</option>
+									<option value="qnx">QNX</option>
+									<option value="ruby">Ruby</option>
+									<option value="sco">SCO</option>
+									<option value="sco_x86">SCO_x86</option>
+									<option value="solaris">Solaris</option>
+									<option value="solaris_mips">Solaris_MIPS</option>
+									<option value="solaris_sparc">Solaris_SPARC</option>
+									<option value="solaris_x86">Solaris_x86</option>
+									<option value="superh_sh4">SuperH_SH4</option>
+									<option value="system_z">System_z</option>
+									<option value="tru64">Tru64</option>
+									<option value="ultrix">ULTRIX</option>
+									<option value="unix">Unix</option>
+									<option value="unixware">UnixWare</option>
+									<option value="windows">Windows</option>
+									<option value="windows_x86">Windows_x86</option>
+									<option value="windows_x86-64">Windows_x86-64</option>
+									<option value="xml">XML</option>
+								</select>
+							</div>
+						</fieldset>
+						<!-- TAG INPUT -->
+						<div type="text">Tag</div>
+						<fieldset>
+							<div class="select">
+								<select name="app_tag" id="app_tag_{{ res._id }}" class="dropdown" tabindex="6">
+									<option value="none">---</option>
+									<option value="authentication buypass / credidentials buypass (ab/cb)">Authentication Buypass / Credidentials Buypass (AB/CB)</option>
+									<option value="buffer overflow">Buffer Overflow</option>
+									<option value="bug report">Bug Report</option>
+									<option value="client side">Client Side</option>
+									<option value="code injection">Code Injection</option>
+									<option value="command injection">Command Injection</option>
+									<option value="console">Console</option>
+									<option value="cross-site request forgery (CSRF)">Cross-Site Request Forgery (CSRF)</option>
+									<option value="cross-site scripting (XSS)">Cross-Site Scripting (XSS)</option>
+									<option value="denial of service (dos)">Denial of Service (DoS)</option>
+									<option value="deserialization">Deserialization</option>
+									<option value="file inclusion (LFI/RFI)">File Inclusion (LFI/RFI)</option>
+									<option value="heap overflow">Heap Overflow</option>
+									<option value="integer overflow">Integer Overflow</option>
+									<option value="local">Local</option>
+									<option value="malware">Malware</option>
+									<option value="metasploit framework (msf)">Metasploit Framework (MSF)</option>
+									<option value="null pointer dereference">NULL Pointer Dereference</option>
+									<option value="object injection">Object Injection</option>
+									<option value="out of bounds">Out Of Bounds</option>
+									<option value="pwn2own">Pwn2Own</option>
+									<option value="race condition">Race Condition</option>
+									<option value="remote">Remote</option>
+									<option value="server-side request forgery">Server-Side Request Forgery (SSRF)</option>
+									<option value="sql injection (sqli)">SQL Injection (SQLi)</option>
+									<option value="traversal">Traversal</option>
+									<option value="type confusion">Type Confusion</option>
+									<option value="use after free (uaf)">Use After Free (UAF)</option>
+									<option value="wordpress core">WordPress Core</option>
+									<option value="wordpress plugin">WordPress Plugin</option>
+									<option value="xml external entity (xxe)">XML External Entity (XXE)</option>
+								</select>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<input type="hidden" name="upload_type" value="vuln_application">
+				<input type="hidden" name="_id" value="{{ res._id }}">
+				<!-- SUBMIT BUTTON -->
+				<fieldset>
+					<button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+				</fieldset>
 
-		            <!-- DELETE BUTTON -->
-		            <fieldset>
-		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=vuln_applications">Delete object from database</button>
-		            </fieldset>
-	            </form>
-            </div>
-		{% elseif res.Upload_Type == "CTF Challenge" %}
-			<button class="collapsibleform">
-				<b>Upload Type: </b>{{ res.Upload_Type }} <br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.name }}<br>
-				<b>Type:</b> {{ res.type }}<br>
-			</button>
-			<div class="content">
-				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
-					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
-					<div class="grid">       
-	            		<div class="first_column">
-	            			<!-- CHALLENGE NAME INPUT -->
-                			<div type="text">Challenge Name </div>
-                			<fieldset>
-			                    <input name="challenge_name" placeholder="Challenge Name" value="{{ res.name }}" type="text" tabindex="1" autofocus>
-			                    <input type="hidden" name="old_challenge_name" value="{{ res.name }}">
-			                </fieldset>	
-			                <!-- AUTHOR INPUT -->
-			                <div type="text">Author</div>
-			                <fieldset>
-			                    <input name="challenge_author" placeholder="Challenge Author" 
-			                    value="{{ res.author }}" type="text" tabindex="4" autofocus>
-			                    <input type="hidden" name="old_challenge_author" 
-			                    value="{{ res.author }}">
-			                </fieldset>
-			                <!-- PORT -->
-			                <div type="text">Port (digits only)</div>
-			                <fieldset>
-			                    <input type="text" name="challenge_port" value="{{ res.port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
-			                    <input type="hidden" name="old_challenge_port" value="{{ res.port }}">
-			                </fieldset>
-			                <!-- TYPE INPUT -->
- 			                <div type="text">Type</div>
- 			                <fieldset>
-			                    <div class="select">
-			                        <select name="challenge_type" id="c_type_{{ res._id }}" class="dropdown" name="Type" tabindex="3">
-			                            <option value="other">---</option>
-			                            <option value="jeopardy">Jeopardy</option>
-			                            <option value="attack-defence">Attack-Defence</option>
-			                            <option value="mixed">Mixed</option>
-			                        </select>
-			                    </div>
-			                    <input type="hidden" name="old_challenge_type" value="{{ res.type }}">
-			                </fieldset>
-			                <!-- CHALLENGE CATEGORY INPUT -->
-			                <div type="text">Category</div>
-			                <fieldset>
-			                    <div class="select">
-			                        <select name="challenge_category" id="c_category_{{ res._id }}"  class="dropdown" tabindex="6">
-			                            <option value="other">---</option>
-			                            <option value="web">Web</option>
-			                            <option value="forensic">Forensic</option>
-			                            <option value="crypto">Crypto</option>
-			                            <option value="binary">Binary</option>
-			                            <option value="stegano">Stegano</option>
-			                            <option value="binary_analysis">Binary Analysis</option>
-			                            <option value="reverse_engeneering">Reverse Engeneering</option>
-			                            <option value="mobile-security">Mobile Security</option>
-			                            <option value="pwnable">Pwnable</option>
-			                            <option value="miscelaneous">Miscelaneous</option>
-			                            <option value="programming">Programming</option>
-			                        </select>
-			                    </div>
-			                    <input type="hidden" name="old_challenge_category" value="{{ res.category }}">
-			                </fieldset>
-			                <!-- DIFFICULTY LEVEL INPUT -->
-			                <div type="text">Difficulty Level</div>
-			                <fieldset>
-			                    <div class="select">
-			                        <select name="challenge_difficulty" id="c_difficulty_{{ res._id }}" class="dropdown">
-			                            <option value="other">---</option>
-			                            <option value="novice">Novice</option>
-			                            <option value="apprentice">Apprentice</option>
-			                            <option value="adept">Adept</option>
-			                            <option value="expert">Expert</option>
-			                            <option value="master">Master</option>
-			                        </select>
-			                    </div>
-			                    <input type="hidden" name="old_challenge_difficulty" value="{{ res.difficulty }}">
-			                </fieldset>
-			                
-			            </div>
-			            <div class="second_column">
-			                 <!-- POINTS -->
-			                <div type="text">Points (digits only)</div>
-			                <fieldset>
-			                    <input type="text" name="challenge_points" value="{{ res.points }}" placeholder="Challenge points" tabindex="8" autofocus pattern="\d*">
-			                    <input type="hidden" name="old_challenge_points" value="{{ res.points }}">
-			                </fieldset>
+				<!-- DELETE BUTTON -->
+				<fieldset>
+					<button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=vuln_applications">Delete object from database</button>
+				</fieldset>
+			</form>
+		</div>
+	{% endfor %}
+	{% for res in findres.ctf_challenges %}
+		<button class="collapsibleform">
+			<b>Upload Type: </b> CTF <br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.name }}<br>
+			<b>Type:</b> {{ res.type }}<br>
+		</button>
+		<div class="content">
+			<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
+				<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
+				<div class="grid">       
+					<div class="first_column">
+						<!-- CHALLENGE NAME INPUT -->
+						<div type="text">Challenge Name </div>
+						<fieldset>
+							<input name="challenge_name" placeholder="Challenge Name" value="{{ res.name }}" type="text" tabindex="1" autofocus required>
+						</fieldset>	
+						<!-- AUTHOR INPUT -->
+						<div type="text">Author</div>
+						<fieldset>
+							<input name="challenge_author" placeholder="Challenge Author" 
+							value="{{ res.author }}" type="text" tabindex="4" autofocus>
+						</fieldset>
+						<!-- PORT -->
+						<div type="text">Port (digits only)</div>
+						<fieldset>
+							<input type="text" name="challenge_port" value="{{ res.port }}" placeholder="Port" pattern="\d*" autofocus tabindex="13">
+						</fieldset>
+						<!-- TYPE INPUT -->
+						<div type="text">Type</div>
+						<fieldset>
+							<div class="select">
+								<select name="challenge_type" id="c_type_{{ res._id }}" class="dropdown" name="Type" tabindex="3">
+									<option value="other">---</option>
+									<option value="jeopardy">Jeopardy</option>
+									<option value="attack-defence">Attack-Defence</option>
+									<option value="mixed">Mixed</option>
+								</select>
+							</div>
+						</fieldset>
+						<!-- CHALLENGE CATEGORY INPUT -->
+						<div type="text">Category</div>
+						<fieldset>
+							<div class="select">
+								<select name="challenge_category" id="c_category_{{ res._id }}"  class="dropdown" tabindex="6">
+									<option value="other">---</option>
+									<option value="web">Web</option>
+									<option value="forensic">Forensic</option>
+									<option value="crypto">Crypto</option>
+									<option value="binary">Binary</option>
+									<option value="stegano">Stegano</option>
+									<option value="binary_analysis">Binary Analysis</option>
+									<option value="reverse_engeneering">Reverse Engeneering</option>
+									<option value="mobile-security">Mobile Security</option>
+									<option value="pwnable">Pwnable</option>
+									<option value="miscelaneous">Miscelaneous</option>
+									<option value="programming">Programming</option>
+								</select>
+							</div>
+						</fieldset>
+						<!-- DIFFICULTY LEVEL INPUT -->
+						<div type="text">Difficulty Level</div>
+						<fieldset>
+							<div class="select">
+								<select name="challenge_difficulty" id="c_difficulty_{{ res._id }}" class="dropdown">
+									<option value="other">---</option>
+									<option value="novice">Novice</option>
+									<option value="apprentice">Apprentice</option>
+									<option value="adept">Adept</option>
+									<option value="expert">Expert</option>
+									<option value="master">Master</option>
+								</select>
+							</div>
+						</fieldset>
+						
+					</div>
+					<div class="second_column">
+							<!-- POINTS -->
+						<div type="text">Points (digits only)</div>
+						<fieldset>
+							<input type="text" name="challenge_points" value="{{ res.points }}" placeholder="Challenge points" tabindex="8" autofocus pattern="\d*">
+						</fieldset>
 
-			                <!-- WALKTHROUGH -->
-			                <div type="type">Walkthrough</div>
-			                <fieldset>
-			                    <textarea name="challenge_walkthrough" placeholder="Challenge walkthrough" tabindex="9">{{ res.walkthrough }}</textarea>
-			                    <input type="hidden" name="old_challenge_walkthrough" value="{{ res.walkthrough }}">
-			                </fieldset>
+						<!-- WALKTHROUGH -->
+						<div type="type">Walkthrough</div>
+						<fieldset>
+							<textarea name="challenge_walkthrough" placeholder="Challenge walkthrough" tabindex="9">{{ res.walkthrough }}</textarea>
+						</fieldset>
 
-			                <!-- FLAG INPUT -->
-			                <div type="text">Flag</div>
-			                <fieldset>
-			                    <input type="text" name="challenge_flag" placeholder="Challenge flag" value="{{ res.flag }}" tabindex="10" autofocus>
-			                    <input type="hidden" name="old_challenge_flag" value="{{ res.flag }}">
-			                </fieldset>
-	            		</div>
-	            	</div>
-	            	<input type="hidden" name="upload_type" value="ctf_challenge">
-	            	<input type="hidden" name="_id" value="{{ res._id }}">
-	            	<!-- SUBMIT BUTTON -->
-		            <fieldset>
-		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-		            </fieldset>
+						<!-- FLAG INPUT -->
+						<div type="text">Flag</div>
+						<fieldset>
+							<input type="text" name="challenge_flag" placeholder="Challenge flag" value="{{ res.flag }}" tabindex="10" autofocus>
+						</fieldset>
+					</div>
+				</div>
+				<input type="hidden" name="upload_type" value="ctf_challenge">
+				<input type="hidden" name="_id" value="{{ res._id }}">
+				<!-- SUBMIT BUTTON -->
+				<fieldset>
+					<button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+				</fieldset>
 
-		            <!-- DELETE BUTTON -->
-		            <fieldset>
-		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=ctf_challenges">Delete object from database</button>
-		            </fieldset>
-	            </form>
-			</div>
-		{% elseif res.Upload_Type == "Malware" %}
-			<button class="collapsibleform">
-				<b>Upload Type: </b>{{ res.Upload_Type }} <br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.	name }}<br>
-				<b>Type:</b> {{ res.type }}<br>
-			</button>
-			<div class="content">
-				<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
-					<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
-					<div class="grid">       
-	            		<div class="first_column">
-	            			<!-- Malware NAME INPUT -->
-                			<div type="text">Malware Name</div>
-	            			<fieldset>
-			                    <input name="malware_name" placeholder="Malware Name" value="{{ res.name }}" type="text" tabindex="1" autofocus>
-			                    <input type="hidden" name="old_malware_name" value="{{ res.name }}">
-			                </fieldset>
-			                <!-- docker FILE SUMMARY INPUT -->
-			                <div type="text">Malware Summary</div>
-			                <fieldset>
-			                    <textarea name="malware_summary" placeholder="Malware Summary" tabindex="8">{{ res.summary }}</textarea>
-			                    <input type="hidden" name="old_malware_summary" value="{{ res.summary }}">
-			                </fieldset>
-	            		</div>
-	            		<div class="second_column">
-	            			<!-- PLATFORM INPUT -->
-			                <div type="text">Platform</div>
-			                <fieldset>
-			                    <div class="select">
-			                        <select name="malware_platform" id="mw_platform_{{ res._id }}" class="dropdown" selected="{{ res.platform }}" tabindex="10">
-			                            <option value="any">---</option>
-			                            <option value="aix">AIX</option>
-			                            <option value="alpha">Alpha</option>
-			                            <option value="android">Android</option>
-			                            <option value="arm">ARM</option>
-			                            <option value="ashx">ASHX</option>
-			                            <option value="asp">ASP</option>
-			                            <option value="aspx">ASPX</option>
-			                            <option value="atheos">AtheOS</option>
-			                            <option value="beos">BeOS</option>
-			                            <option value="bsd">BSD</option>
-			                            <option value="bsdi_x86">BSDi_x86</option>
-			                            <option value="bsd_ppc">BSD_PPC</option>
-			                            <option value="bsd_x86">BSD_x86</option>
-			                            <option value="cfm">CFM</option>
-			                            <option value="cgi">CGI</option>
-			                            <option value="ezine">eZine</option>
-			                            <option value="freeBSD">FreeBSD</option>
-			                            <option value="freebsd_x86">FreeBSD_x86</option>
-			                            <option value="freebsd_x86-64">FreeBSD_x86-64</option>
-			                            <option value="generator">Generator</option>
-			                            <option value="hardware">hardware</option>
-			                            <option value="hp-ux">HP-UX</option>
-			                            <option value="immunix">Immunix</option>
-			                            <option value="ios">iOS</option>
-			                            <option value="irix">IRIX</option>
-			                            <option value="java">Java</option>
-			                            <option value="json">JSON</option>
-			                            <option value="jsp">JSP</option>
-			                            <option value="linux">Linux</option>
-			                            <option value="linux_crisv32">Linux_CRISv32</option>
-			                            <option value="linux_mips">Linux_MIPS</option>
-			                            <option value="linux_PPC">Linux_PPC</option>
-			                            <option value="linux_sparc">Linux_SPARC</option>
-			                            <option value="linux_x86">Linux_x86</option>
-			                            <option value="linux_x86-64">Linux_x86-64</option>
-			                            <option value="lua">Lua</option>
-			                            <option value="macos">macOS</option>
-			                            <option value="magazine">Magazine</option>
-			                            <option value="minix">MINIX</option>
-			                            <option value="multiple">Multiple</option>
-			                            <option value="netbsd_x86">NetBSD_x86</option>
-			                            <option value="netware">Netware</option>
-			                            <option value="nodeJS">NodeJS</option>
-			                            <option value="novell">Novell</option>
-			                            <option value="openbsd">OpenBSD</option>
-			                            <option value="openbsd_x86">openBSD_x86</option>
-			                            <option value="osx">OSX</option>
-			                            <option value="osx_ppc">OSX_PPC</option>
-			                            <option value="palm_os">Palm_OS</option>
-			                            <option value="perl">Perl</option>
-			                            <option value="php">PHP</option>
-			                            <option value="plan9">Plan9</option>
-			                            <option value="python">Python</option>
-			                            <option value="qnx">QNX</option>
-			                            <option value="ruby">Ruby</option>
-			                            <option value="sco">SCO</option>
-			                            <option value="sco_x86">SCO_x86</option>
-			                            <option value="solaris">Solaris</option>
-			                            <option value="solaris_mips">Solaris_MIPS</option>
-			                            <option value="solaris_sparc">Solaris_SPARC</option>
-			                            <option value="solaris_x86">Solaris_x86</option>
-			                            <option value="superh_sh4">SuperH_SH4</option>
-			                            <option value="system_z">System_z</option>
-			                            <option value="tru64">Tru64</option>
-			                            <option value="ultrix">ULTRIX</option>
-			                            <option value="unix">Unix</option>
-			                            <option value="unixware">UnixWare</option>
-			                            <option value="windows">Windows</option>
-			                            <option value="windows_x86">Windows_x86</option>
-			                            <option value="windows_x86-64">Windows_x86-64</option>
-			                            <option value="xml">XML</option>
-			                        </select>
-			                    </div>
-			                    <input type="hidden" name="old_malware_platform" value="{{ res.platform }}">
-			                </fieldset>
+				<!-- DELETE BUTTON -->
+				<fieldset>
+					<button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=ctf_challenges">Delete object from database</button>
+				</fieldset>
+			</form>
+		</div>
+	{% endfor %}
+	{% for res in findres.malware %}
+		<button class="collapsibleform">
+			<b>Upload Type: </b> Malware <br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.	name }}<br>
+			<b>Type:</b> {{ res.type }}<br>
+		</button>
+		<div class="content">
+			<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
+				<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br> 
+				<div class="grid">       
+					<div class="first_column">
+						<!-- Malware NAME INPUT -->
+						<div type="text">Malware Name</div>
+						<fieldset>
+							<input name="malware_name" placeholder="Malware Name" value="{{ res.name }}" type="text" tabindex="1" autofocus required>
+						</fieldset>
+						<!-- docker FILE SUMMARY INPUT -->
+						<div type="text">Malware Summary</div>
+						<fieldset>
+							<textarea name="malware_summary" placeholder="Malware Summary" tabindex="8">{{ res.summary }}</textarea>
+						</fieldset>
+					</div>
+					<div class="second_column">
+						<!-- PLATFORM INPUT -->
+						<div type="text">Platform</div>
+						<fieldset>
+							<div class="select">
+								<select name="malware_platform" id="mw_platform_{{ res._id }}" class="dropdown" selected="{{ res.platform }}" tabindex="10">
+									<option value="any">---</option>
+									<option value="aix">AIX</option>
+									<option value="alpha">Alpha</option>
+									<option value="android">Android</option>
+									<option value="arm">ARM</option>
+									<option value="ashx">ASHX</option>
+									<option value="asp">ASP</option>
+									<option value="aspx">ASPX</option>
+									<option value="atheos">AtheOS</option>
+									<option value="beos">BeOS</option>
+									<option value="bsd">BSD</option>
+									<option value="bsdi_x86">BSDi_x86</option>
+									<option value="bsd_ppc">BSD_PPC</option>
+									<option value="bsd_x86">BSD_x86</option>
+									<option value="cfm">CFM</option>
+									<option value="cgi">CGI</option>
+									<option value="ezine">eZine</option>
+									<option value="freeBSD">FreeBSD</option>
+									<option value="freebsd_x86">FreeBSD_x86</option>
+									<option value="freebsd_x86-64">FreeBSD_x86-64</option>
+									<option value="generator">Generator</option>
+									<option value="hardware">hardware</option>
+									<option value="hp-ux">HP-UX</option>
+									<option value="immunix">Immunix</option>
+									<option value="ios">iOS</option>
+									<option value="irix">IRIX</option>
+									<option value="java">Java</option>
+									<option value="json">JSON</option>
+									<option value="jsp">JSP</option>
+									<option value="linux">Linux</option>
+									<option value="linux_crisv32">Linux_CRISv32</option>
+									<option value="linux_mips">Linux_MIPS</option>
+									<option value="linux_PPC">Linux_PPC</option>
+									<option value="linux_sparc">Linux_SPARC</option>
+									<option value="linux_x86">Linux_x86</option>
+									<option value="linux_x86-64">Linux_x86-64</option>
+									<option value="lua">Lua</option>
+									<option value="macos">macOS</option>
+									<option value="magazine">Magazine</option>
+									<option value="minix">MINIX</option>
+									<option value="multiple">Multiple</option>
+									<option value="netbsd_x86">NetBSD_x86</option>
+									<option value="netware">Netware</option>
+									<option value="nodeJS">NodeJS</option>
+									<option value="novell">Novell</option>
+									<option value="openbsd">OpenBSD</option>
+									<option value="openbsd_x86">openBSD_x86</option>
+									<option value="osx">OSX</option>
+									<option value="osx_ppc">OSX_PPC</option>
+									<option value="palm_os">Palm_OS</option>
+									<option value="perl">Perl</option>
+									<option value="php">PHP</option>
+									<option value="plan9">Plan9</option>
+									<option value="python">Python</option>
+									<option value="qnx">QNX</option>
+									<option value="ruby">Ruby</option>
+									<option value="sco">SCO</option>
+									<option value="sco_x86">SCO_x86</option>
+									<option value="solaris">Solaris</option>
+									<option value="solaris_mips">Solaris_MIPS</option>
+									<option value="solaris_sparc">Solaris_SPARC</option>
+									<option value="solaris_x86">Solaris_x86</option>
+									<option value="superh_sh4">SuperH_SH4</option>
+									<option value="system_z">System_z</option>
+									<option value="tru64">Tru64</option>
+									<option value="ultrix">ULTRIX</option>
+									<option value="unix">Unix</option>
+									<option value="unixware">UnixWare</option>
+									<option value="windows">Windows</option>
+									<option value="windows_x86">Windows_x86</option>
+									<option value="windows_x86-64">Windows_x86-64</option>
+									<option value="xml">XML</option>
+								</select>
+							</div>
+						</fieldset>
 
-			                <!-- TYPE INPUT -->
-			                <div type="text">Malware Type</div>
-			                <fieldset>
-			                    <div class="select">
-			                        <select name="malware_type" id="mw_type_{{ res._id }}" class="dropdown" selected="{{ res.type }}" tabindex="10">
-			                            <option value="none">---</option>
-			                            <option value="adware">Adware</option>
-			                            <option value="spyware">Spyware</option>
-			                            <option value="virus">Virus</option>
-			                            <option value="worm">Worm</option>
-			                            <option value="trojan">Trojan</option>
-			                            <option value="rootkit">Rootkit</option>
-			                            <option value="backdoors">Backdoors</option>
-			                            <option value="keyloggers">Keyloggers</option>
-			                            <option value="rouge_security_software">Rouge Security Software</option>
-			                            <option value="ransomware">Ransomware</option>
-			                            <option value="browser_hijacker">Browser Hijacker</option>
-			                            <option value="other">Other</option>
-			                    </select>
-			                    <input type="hidden" name="old_malware_type" value="{{ res.type }}">
-			                </fieldset>
-	            		</div>
-	            	</div>
-	            	<input type="hidden" name="upload_type" value="malware">
-	            	<input type="hidden" name="_id" value="{{ res._id }}">
-	            	<!-- SUBMIT BUTTON -->
-		            <fieldset>
-		                <button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
-		            </fieldset>
+						<!-- TYPE INPUT -->
+						<div type="text">Malware Type</div>
+						<fieldset>
+							<div class="select">
+								<select name="malware_type" id="mw_type_{{ res._id }}" class="dropdown" selected="{{ res.type }}" tabindex="10">
+									<option value="none">---</option>
+									<option value="adware">Adware</option>
+									<option value="spyware">Spyware</option>
+									<option value="virus">Virus</option>
+									<option value="worm">Worm</option>
+									<option value="trojan">Trojan</option>
+									<option value="rootkit">Rootkit</option>
+									<option value="backdoors">Backdoors</option>
+									<option value="keyloggers">Keyloggers</option>
+									<option value="rouge_security_software">Rouge Security Software</option>
+									<option value="ransomware">Ransomware</option>
+									<option value="browser_hijacker">Browser Hijacker</option>
+									<option value="other">Other</option>
+							</select>
+						</fieldset>
+					</div>
+				</div>
+				<input type="hidden" name="upload_type" value="malware">
+				<input type="hidden" name="_id" value="{{ res._id }}">
+				<!-- SUBMIT BUTTON -->
+				<fieldset>
+					<button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
+				</fieldset>
 
-		            <!-- DELETE BUTTON -->
-		            <fieldset>
-		                <button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=malware">Delete object from database</button>
-		            </fieldset>
-	            </form>
-	        </div>
-		{% endif %}
+				<!-- DELETE BUTTON -->
+				<fieldset>
+					<button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=malware">Delete object from database</button>
+				</fieldset>
+			</form>
+		</div>
 	{% endfor %}
 {% endif %}
 
@@ -463,31 +444,31 @@
 	}
 
 	{% if findres %}
-		{% for res in findres %}
-			{% if res.Upload_Type == "Vulnerable Application" %}
-				{% if res.platform %}
-					$('#app_platform_{{ res._id }}').val('{{ res.platform }}');
-				{% endif %}
-				{% if res.tag %}
-					$('#app_tag_{{ res._id }}').val('{{ res.tag }}');
-				{% endif %}
-			{% elseif res.Upload_Type == "CTF Challenge" %}
-				{% if res.type %}
-					$('#c_type_{{ res._id }}').val('{{ res.type }}');
-				{% endif %}
-				{% if res.category %}
-					$('#c_category_{{ res._id }}').val('{{ res.category }}');
-				{% endif %}
-				{% if res.difficulty %}
-					$('#c_difficulty_{{ res._id }}').val('{{ res.difficulty }}');
-				{% endif %}
-			{% elseif res.Upload_Type == "Malware" %}
-				{% if res.platform %}
-					$('#mw_platform_{{ res._id }}').val('{{ res.platform }}');
-				{% endif %}
-				{% if res.type %}
-					$('#mw_type_{{ res._id }}').val('{{ res.type }}');
-				{% endif %}
+		{% for res in findres.vuln_applications %}
+			{% if res.platform %}
+				$('#app_platform_{{ res._id }}').val('{{ res.platform }}');
+			{% endif %}
+			{% if res.tag %}
+				$('#app_tag_{{ res._id }}').val('{{ res.tag }}');
+			{% endif %}
+		{% endfor %}
+		{% for res in findres.ctf_challenges %}
+			{% if res.type %}
+				$('#c_type_{{ res._id }}').val('{{ res.type }}');
+			{% endif %}
+			{% if res.category %}
+				$('#c_category_{{ res._id }}').val('{{ res.category }}');
+			{% endif %}
+			{% if res.difficulty %}
+				$('#c_difficulty_{{ res._id }}').val('{{ res.difficulty }}');
+			{% endif %}
+		{% endfor %}
+		{% for res in findres.ctf_challenges %}
+			{% if res.platform %}
+				$('#mw_platform_{{ res._id }}').val('{{ res.platform }}');
+			{% endif %}
+			{% if res.type %}
+				$('#mw_type_{{ res._id }}').val('{{ res.type }}');
 			{% endif %}
 		{% endfor %}
 	{% endif %}

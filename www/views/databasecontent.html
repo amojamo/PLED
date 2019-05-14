@@ -7,171 +7,169 @@
 	</div>
 </form><br>
 {% if searchres %}
-<h5>{{ searchres | length }} results for search '{{ query }}'</h5>
-	{% for res in searchres %}
-		{% if res.Upload_Type == "Vulnerable Application" %}
-			<button class="collapsible">
-				<b>Upload Type: </b> {{ res.Upload_Type }}<br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.application_name }}<br>
-				<b>CVE:</b> {{ res.cve }}<br>
-			</button>
-			<div class="content">
-				<b>ID: </b>{{ res._id }}<br>
+<h5>{{ searchres.vuln_applications | length + searchres.ctf_challenges | length + searchres.malware | length }} results for search '{{ query }}'</h5>
+	{% for res in searchres.vuln_applications %}	
+		<button class="collapsible">
+			<b>Upload Type: </b> Vulnerable Application<br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.application_name }}<br>
+			<b>CVE:</b> {{ res.cve }}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>{{ res._id }}<br>
 
-				{% if res.exploitdb_id %}
-				  	<b>Exploitdb id: </b>
-				  	{{ res.exploitdb_id }}<br>
-				  {% endif %}
+			{% if res.exploitdb_id %}
+				<b>Exploitdb id: </b>
+				{{ res.exploitdb_id }}<br>
+				{% endif %}
 
-			  	<b>Name: </b>{{ res.application_name }}<br>
+			<b>Name: </b>{{ res.application_name }}<br>
 
-			  	{% if res.summary %}
-			  		<b>Summary: </b>
-			  		{{ res.summary }}<br>
-			  	{% endif %}
+			{% if res.summary %}
+				<b>Summary: </b>
+				{{ res.summary }}<br>
+			{% endif %}
 
-			  	{% if res.type %}
-				  	<b>Type: </b>
-				  	{{ res.type }}<br>
-			  	{% endif %}
+			{% if res.type %}
+				<b>Type: </b>
+				{{ res.type }}<br>
+			{% endif %}
 
-			  	{% if res.platform %}
-			  		<b>Platform: </b>
-			  		{{ res.platform }}<br>
-			  	{% endif %}
+			{% if res.platform %}
+				<b>Platform: </b>
+				{{ res.platform }}<br>
+			{% endif %}
 
-			  	{% if res.tag %}
-			  		<b>Tag: </b>
-			  		{{ res.tag }}<br>
-			  	{% endif %}
+			{% if res.tag %}
+				<b>Tag: </b>
+				{{ res.tag }}<br>
+			{% endif %}
 
-			  	{% if res.cve %}
-			  		<b>CVE: </b>
-			  		{{ res.cve }}<br>
-			  	{% endif %}
+			{% if res.cve %}
+				<b>CVE: </b>
+				{{ res.cve }}<br>
+			{% endif %}
 
-			  	{% if res.cve_summary %}
-			  		<b>CVE Summary: </b>
-			  		{{ res.cve_summary }}<br>
-			  	{% endif %}
+			{% if res.cve_summary %}
+				<b>CVE Summary: </b>
+				{{ res.cve_summary }}<br>
+			{% endif %}
 
-			  	{% if res.cwe %}
-			  		<b>CWE: </b>
-			  		{{ res.cwe }}<br>
-			  	{% endif %}
+			{% if res.cwe %}
+				<b>CWE: </b>
+				{{ res.cwe }}<br>
+			{% endif %}
 
-			  	{% if res.impact %}
-			  		<b>Impact: </b>
-					{% for key, impact in res.impact %}<br>
-						{{ key }}: {{ impact | e }}
-					{% endfor %}  
-			  	{% endif %}<br>
+			{% if res.impact %}
+				<b>Impact: </b>
+				{% for key, impact in res.impact %}<br>
+					{{ key }}: {{ impact | e }}
+				{% endfor %}  
+			{% endif %}<br>
 
-			  	{% if res.vulnerable_configuration %}
-			  		<b>Vulnerable Configuration: </b>
-			  		{% for vc in res.vulnerable_configuration %}
-			  			{{ vc | json_encode }}<br>
-			  		{% endfor %}
-			  	{% endif %}
-				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
-				
-				  
+			{% if res.vulnerable_configuration %}
+				<b>Vulnerable Configuration: </b>
+				{% for vc in res.vulnerable_configuration %}
+					{{ vc | json_encode }}<br>
+				{% endfor %}
+			{% endif %}
+			<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>		  
 		</div>
-		{% elseif res.Upload_Type == "CTF Challenge" %}
-			<button class="collapsible">
-				<b>Upload Type:</b>{{ res.Upload_Type }} <br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.name }}<br>
-				<b>Type:</b> {{ res.type }}<br>
-			</button>
-			<div class="content">
-				<b>ID: </b>
-				{{ res._id }}<br>
-				<b>Name: </b>
-				{{ res.name }}<br>
-				
-				{% if res.summary %}
-					<b>Summary: </b>
-					{{ res.summary }}<br>
-				{% endif %}
-				{% if res.author %}
-					<b>Author: </b>
-					{{ res.author }}<br>
-				{% endif %}
-				{% if res.creation_date %}
-					<b>Creation Date: </b>
-					{{ res.creation_date }}<br>
-				{% endif %}
-				{% if res.added_date %}
-					<b>Added Date: </b>
-					{{ res.added_date }}<br>
-				{% endif %}
-				{% if res.port %}
-					<b>Port: </b>
-					{{ res.port }}<br>
-				{% endif %}
-				{% if res.type %}
-					<b>Type: </b>
-					{{ res.type }}<br>
-				{% endif %}
-				{% if res.category %}
-					<b>Category: </b>
-					{{ res.category }}<br>
-				{% endif %}
-				{% if res.difficulty %}
-					<b>Difficulty: </b>
-					{{ res.difficulty }}<br>
-				{% endif %}
-				{% if res.points %}
-					<b>Points: </b>
-					{{ res.points}}<br>
-				{% endif %}
-				{% if res.walkthrough %}
-					<b>Walkthrough: </b>
-					{{ res.walkthrough }}<br>
-				{% endif %}
-				{% if res.flag %}
-					<b>Flag: </b>
-					{{ res.flag }}<br>
-				{% endif %}
-				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
-			</div>
-		{% elseif res.Upload_Type == "Malware" %}
-			<button class="collapsible">
-				<b>Upload Type: </b>{{ res.Upload_Type}}<br>
-				<b>ID:</b> {{ res._id }} <br>
-				<b>Name:</b> {{ res.name }}<br>
-				<b>Type:</b> {{ res.type}}<br>
-			</button>
-			<div class="content">
-				<b>ID: </b>
-				{{ res._id }}<br>
-				<b>Name: </b>
-				{{ res.name }}<br>
-				
-				{% if res.summary %}
-					<b>Summary: </b>
-					{{ res.summary }}<br>
-				{% endif %}
+	{% endfor %}	
+	{% for res in searchres.ctf_challenges %}	
+		<button class="collapsible">
+			<b>Upload Type:</b> Ctf Challenge <br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.name }}<br>
+			<b>Type:</b> {{ res.type }}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>
+			{{ res._id }}<br>
+			<b>Name: </b>
+			{{ res.name }}<br>
+			
+			{% if res.summary %}
+				<b>Summary: </b>
+				{{ res.summary }}<br>
+			{% endif %}
+			{% if res.author %}
+				<b>Author: </b>
+				{{ res.author }}<br>
+			{% endif %}
+			{% if res.creation_date %}
+				<b>Creation Date: </b>
+				{{ res.creation_date }}<br>
+			{% endif %}
+			{% if res.added_date %}
+				<b>Added Date: </b>
+				{{ res.added_date }}<br>
+			{% endif %}
+			{% if res.port %}
+				<b>Port: </b>
+				{{ res.port }}<br>
+			{% endif %}
+			{% if res.type %}
+				<b>Type: </b>
+				{{ res.type }}<br>
+			{% endif %}
+			{% if res.category %}
+				<b>Category: </b>
+				{{ res.category }}<br>
+			{% endif %}
+			{% if res.difficulty %}
+				<b>Difficulty: </b>
+				{{ res.difficulty }}<br>
+			{% endif %}
+			{% if res.points %}
+				<b>Points: </b>
+				{{ res.points}}<br>
+			{% endif %}
+			{% if res.walkthrough %}
+				<b>Walkthrough: </b>
+				{{ res.walkthrough }}<br>
+			{% endif %}
+			{% if res.flag %}
+				<b>Flag: </b>
+				{{ res.flag }}<br>
+			{% endif %}
+			<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
+		</div>
+	{% endfor %}	
+	{% for res in searchres.malware %}
+		<button class="collapsible">
+			<b>Upload Type: </b>Malware<br>
+			<b>ID:</b> {{ res._id }} <br>
+			<b>Name:</b> {{ res.name }}<br>
+			<b>Type:</b> {{ res.type}}<br>
+		</button>
+		<div class="content">
+			<b>ID: </b>
+			{{ res._id }}<br>
+			<b>Name: </b>
+			{{ res.name }}<br>
+			
+			{% if res.summary %}
+				<b>Summary: </b>
+				{{ res.summary }}<br>
+			{% endif %}
 
-				{% if res.platform %}
-					<b>Platform: </b>
-					{{ res.platform }}<br>
-				{% endif %}
+			{% if res.platform %}
+				<b>Platform: </b>
+				{{ res.platform }}<br>
+			{% endif %}
 
-				{% if res.type %}
-					<b>Type: </b>
-					{{ res.type }}<br>
-				{% endif %}
+			{% if res.type %}
+				<b>Type: </b>
+				{{ res.type }}<br>
+			{% endif %}
 
-				{% if res.date_added %}
-					<b>Date added: </b>
-					{{ res.date_added }}<br>
-				{% endif %}
-				<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
-			</div>
-		{% endif %}
+			{% if res.date_added %}
+				<b>Date added: </b>
+				{{ res.date_added }}<br>
+			{% endif %}
+			<button onclick="window.location.href='{{ res.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
+		</div>
 	{% endfor %}
 {% endif %}
 <br><br><h4>Latest insertions into database</h4>
@@ -315,7 +313,6 @@
 			{% if ctf_challenge.flag %}
 				<b>Flag: </b>
 				{{ ctf_challenge.flag }}<br>
-				PATH: {{ ctf_challenge.file_path }}
 			{% endif %}
 			<button onclick="window.location.href='{{ ctf_challenge.file }}'" class="btn"><i class="fa fa-download"></i> Download</button>
 		</div>

@@ -1,5 +1,6 @@
 <?php
 require_once "../vendor/autoload.php";
+require_once "../src/classes/Api.php";
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
@@ -28,14 +29,10 @@ if($_POST['upload_type'] == "vuln_application") {
 	$application_to_modify = json_decode('{}');
 	if (!empty($_POST['app_name'])) 
 		$application_to_modify->application_name = $_POST['app_name'];
-	//if (!empty($_POST['app_summary'])) 
-		$application_to_modify->summary = $_POST['app_summary'];
-	//if (!empty($_POST['app_cve'])) 
-		$application_to_modify->cve = $_POST['app_cve'];
-	//if ($_POST['app_platform'] != "any")
-		$application_to_modify->platform = $_POST['app_platform'];
-	//if ($_POST['app_tag'] != "none") 
-		$application_to_modify->tag = $_POST['app_tag'];
+	$application_to_modify->summary = $_POST['app_summary'];
+	$application_to_modify->cve = $_POST['app_cve'];
+	$application_to_modify->platform = $_POST['app_platform'];
+	$application_to_modify->tag = $_POST['app_tag'];
 
 	$resource->resource[0] = $application_to_modify;
 	$body = json_encode($resource, true);
@@ -47,22 +44,14 @@ if($_POST['upload_type'] == "vuln_application") {
 	$challenge_to_modify = json_decode('{}');
 	if(!empty($_POST['challenge_name']))
 		$challenge_to_modify->name = $_POST['challenge_name'];
-	//if(!empty($_POST['challenge_author']))
-		$challenge_to_modify->author = $_POST['challenge_author'];
-	//if(!empty($_POST['challenge_port']))
-		$challenge_to_modify->port = $_POST['challenge_port'];
-	//if($_POST['challenge_type'] != "other")
-		$challenge_to_modify->type = $_POST['challenge_type'];
-	//($_POST['challenge_category'] != "other")
-		$challenge_to_modify->category = $_POST['challenge_category'];
-	//if($_POST['challenge_difficulty'] != "other")
-		$challenge_to_modify->difficulty = $_POST['challenge_difficulty'];
-	//if(!empty($_POST['challenge_points']))
-		$challenge_to_modify->points = $_POST['challenge_points'];
-	//if(!empty($_POST['challenge_walkthrough']))
-		$challenge_to_modify->walkthrough = $_POST['challenge_walkthrough'];
-	//if(!empty($_POST['challenge_flag']))
-		$challenge_to_modify->flag = $_POST['challenge_flag'];
+	$challenge_to_modify->author = $_POST['challenge_author'];
+	$challenge_to_modify->port = $_POST['challenge_port'];
+	$challenge_to_modify->type = $_POST['challenge_type'];
+	$challenge_to_modify->category = $_POST['challenge_category'];
+	$challenge_to_modify->difficulty = $_POST['challenge_difficulty'];
+	$challenge_to_modify->points = $_POST['challenge_points'];
+	$challenge_to_modify->walkthrough = $_POST['challenge_walkthrough'];
+	$challenge_to_modify->flag = $_POST['challenge_flag'];
 	
 	$resource->resource[0] = $challenge_to_modify;
 	$body = json_encode($resource, true);
@@ -89,29 +78,17 @@ if($_POST['upload_type'] == "vuln_application") {
 function sendPatchRequest($collection, $body, $ini_array) {
 	$dfapikey = 'X-DreamFactory-API-Key:'.$ini_array["api_key"];
 
-		$ch = curl_init();
-        $options = array(CURLOPT_URL => 'http://'.$ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'?filter=_id='.$_POST['_id'],
-                         CURLOPT_HTTPHEADER => array($dfapikey,
-                                                    'Content-Type: application/json'),
-                         CURLOPT_CUSTOMREQUEST => 'PATCH',
-                         CURLOPT_POSTFIELDS => $body,
-                         CURLOPT_RETURNTRANSFER => 1
-                        );
-
-        curl_setopt_array($ch, $options);
-
-        // Send the request
-        $response = curl_exec($ch);
-        $obj = json_decode($response, true);
-        
+        $api = new Api($ini_array);
+		$res = $api->insert($body, 'vuln_applications');
+		$obj = json_decode($res['response'], true);
         // Check for errors
-        if($response === FALSE){
-            die(curl_error($ch));
+        if($res['response'] === FALSE){
+            die($res['error']);
             $data['response'] = 'Something is wrong, check DreamFactory configurations';
             echo $twig->render('databaseManagementPage.html', $data); // Render html
         }
 
-        // TODO Find do error handling on response code.
+        // Error handling for not code 200
         if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200)) {
             $data['updated'] = 'false';
         } else {
