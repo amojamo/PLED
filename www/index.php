@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "./vendor/autoload.php";
 require_once "./src/classes/Api.php";
 use Aws\S3\S3Client;
@@ -68,7 +69,6 @@ if(isset($_GET['deleted'])) {
 $api = new Api($ini_array);
 //Collections are separated by commas
 $collections = explode(',', $ini_array['collections']);
-
 //Only create collections if its the first time launching the page
 if ($_SESSION['firsttime']) {
 	$api->createCollections($collections);
