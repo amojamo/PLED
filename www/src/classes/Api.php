@@ -112,7 +112,7 @@ class Api {
             if(isset($v['file_path'])) {
                 $cmd = $this->s3->getCommand('GetObject', [
                     'Bucket' => 'pled_files',
-                    'Key'    => 'vuln_applications/'.$v['file_path']
+                    'Key'    => 'ctf_challenges/'.$v['file_path']
                 ]);
                 $signed_url = $this->s3->createPresignedRequest($cmd, '+1 hour');
                 $data[$key]['file'] = $signed_url->getUri();
@@ -141,7 +141,7 @@ class Api {
             if(isset($v['file_path'])) {
                 $cmd = $this->s3->getCommand('GetObject', [
                     'Bucket' => 'pled_files',
-                    'Key'    => 'vuln_applications/'.$v['file_path']
+                    'Key'    => 'malware/'.$v['file_path']
                 ]);
                 $signed_url = $this->s3->createPresignedRequest($cmd, '+1 hour');
                 $data[$key]['file'] = $signed_url->getUri();
