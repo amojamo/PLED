@@ -20,24 +20,23 @@ foreach($collections as $collection){
 }
 /**
 *
-*	If Search input is empty
+*	If Search input is empty, handle the empty response,
+*	else create a search and return response in $data['findres']
+*	and $data['searchres'] depending on if the search is sent from
+*	the 'find'- or 'modify'-tab.
 *
 **/
 if(empty($_POST['search'])) {
-
-	// Handle empty search res
+	/*
+	*	Place handling for empty seach here
+	*/
 	$data['placeholdercve'] = "CVE-ID";
 	echo $twig->render('databaseManagementPage.html', $data);
-} 
-/**
-*
-*	If Search input not empty
-*
-**/
-else {
+} else {
 	if (!empty($_POST['from'])) {
 		$search = $_POST['search'];
 		$search = urlencode($search);
+		// If the search is from the 'Modify' tab
 		if($_POST['from'] == "modify") {
 			$data['findres'] = [];
 			foreach($collections as $collection){
@@ -48,8 +47,7 @@ else {
 			$data['placeholdercve'] = "CVE-ID";
 			echo $twig->render('databaseManagementPage.html', $data);
 		} 
-
-
+		// If the search is from the 'Find' tab
 		if ($_POST['from'] == "search") {
 			$data['searchres'] = [];
 			foreach($collections as $collection){

@@ -12,8 +12,7 @@ $ini_array = parse_ini_file("../conf/phpconfig.ini", true);
 /**
 *
 *	Find out what type of content is being updated
-*	Find out if any of the fields are changed
-*	If they are changed, add them to request body
+*	Create a request body
 *	Send the request and return to index.php with message
 *
 *	TODO: DreamFactory Rest API has no way of unseting empty keys/value
@@ -36,7 +35,7 @@ if($_POST['upload_type'] == "vuln_application") {
 
 	$resource->resource[0] = $application_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('vuln_applications', $body, $ini_array);
+	sendPatchRequest('vuln_applications', $body, $ini_array["api_key"]);
 
 } else if ($_POST['upload_type'] == "ctf_challenge") {	
 	$resource = json_decode('{}');
@@ -55,7 +54,7 @@ if($_POST['upload_type'] == "vuln_application") {
 	
 	$resource->resource[0] = $challenge_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('ctf_challenges', $body, $ini_array);
+	sendPatchRequest('ctf_challenges', $body, $ini_array["api_key"]);
 
 } else if ($_POST['upload_type'] == "malware") {
 	$resource = json_decode('{}');
@@ -69,17 +68,23 @@ if($_POST['upload_type'] == "vuln_application") {
 
 	$resource->resource[0] = $malware_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('malware', $body, $ini_array);
+	sendPatchRequest('malware', $body, $ini_array["api_key"]);
 
 } else {
 	// This should not happen
 }
 
-function sendPatchRequest($collection, $body, $ini_array) {
-	$dfapikey = 'X-DreamFactory-API-Key:'.$ini_array["api_key"];
-
+/**
+*	Send Patch Request
+*
+*	@param $collection - what collection to send the request towards
+*	@param $body - The body of the request
+*	@param $apikey - API key
+*
+**/
+function sendPatchRequest($collection, $body) {
         $api = new Api($ini_array);
-		$res = $api->insert($body, 'vuln_applications');
+		$res = $api->patch($body, 'vuln_applications');
 		$obj = json_decode($res['response'], true);
         // Check for errors
         if($res['response'] === FALSE){
@@ -88,7 +93,7 @@ function sendPatchRequest($collection, $body, $ini_array) {
             echo $twig->render('databaseManagementPage.html', $data); // Render html
         }
 
-        // Error handling for not code 200
+        // Error handling for code != 200
         if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200)) {
             $data['updated'] = 'false';
         } else {

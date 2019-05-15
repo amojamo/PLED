@@ -11,6 +11,7 @@ $ini_array = parse_ini_file("../conf/phpconfig.ini", true);
 
 $api = new Api($ini_array);
 $collections = explode(',', $ini_array['collections']);
+// Go through the collections and check that they are in the database
 foreach($collections as $collection){
 	$data[$collection] = $api->getContents($collection);
 }
@@ -50,13 +51,9 @@ if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) 
             $data['placeholdercve'] = "Could not find this CVE in CIRCL";
         }
     }
-    
-    if(!empty($_POST['app_summary'])) {
+    if(!empty($_POST['app_summary']))
         $data['app_summary'] = $_POST['app_summary'];
-    }
-
     $data['app_platform'] = $_POST['app_platform'];
-
     $data['app_tag'] = $_POST['app_tag'];
 
     echo $twig->render('databaseManagementPage.html', $data); // Render html
@@ -87,7 +84,6 @@ if (empty($_POST['app_name']) || empty($_FILES['app_fileToUpload']['tmp_name']) 
 **/  
 else {
     /** Get Open Stack config **/
-    
     $s3 = include 'openstack/openstack.php';
 
     /**
@@ -100,10 +96,6 @@ else {
 
     $files = [];
     $content = file_get_contents($_FILES['app_fileToUpload']['tmp_name']);
-    //$filename = hash('md5', $_FILES['app_fileToUpload']['name'].date_timestamp_get(date_create()));
-    //$path = $_FILES['app_fileToUpload']['name'];
-    //$fileext = pathinfo($path, PATHINFO_EXTENSION);
-    //$filename = $filename.'.'.$fileext;
     $filename = uniqid().'_'.$_FILES['app_fileToUpload']['name'];
     array_push($files, $filename);
 
@@ -113,8 +105,6 @@ else {
             'Key' => $filename,
             'Body' => $content
         ]);
-
-        //echo "Application file uploaded to Swift";
 
         /* API post request */
         $json = '{}';
@@ -149,7 +139,7 @@ else {
 
         $api = new Api($ini_array);
         $body = json_encode($resource, true);
-        $res = $api->insert($body, 'vuln_applications');
+        $res = $api->insert($body, 'vuln_applications');    // call insert function in Api class
         $obj = json_decode($res['response'], true);
         // Check for errors
         if($res['response'] === FALSE){
@@ -158,7 +148,7 @@ else {
             echo $twig->render('databaseManagementPage.html', $data); // Render html
         }
 
-        // TODO Find do error handling on response code.
+        // Error handling for code != 200
         if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200)) {
             $data['uploaded'] = 'false';
         } else {

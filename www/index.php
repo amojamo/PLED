@@ -76,7 +76,6 @@ if ($_SESSION['firsttime']) {
 	$_SESSION['firsttime'] = false;
 }
 
-
 //For each collection, get data and render with Twig
 foreach($collections as $collection){
 	$data[$collection] = $api->getContents($collection);

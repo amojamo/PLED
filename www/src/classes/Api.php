@@ -187,15 +187,15 @@ class Api {
         if($this->collectionExists($collection)){
             switch ($collection) {
                 case 'vuln_applications':
-                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?filter=(_id%20like%20%' . $search . '%)%20or%20(application_name%20like%20%' . $search . '%)%20or%20(exploitdb_id%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(published_date%20like%20%' . $search . '%)%20or%20(cve%20like%20%' . $search . '%)%20or%20(cve_summary%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
+                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/vuln_applications?limit=25&filter=(_id%20like%20%' . $search . '%)%20or%20(application_name%20like%20%' . $search . '%)%20or%20(exploitdb_id%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(published_date%20like%20%' . $search . '%)%20or%20(cve%20like%20%' . $search . '%)%20or%20(cve_summary%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
                     $data = $this->getVuln_applications($json);
                     break;
                 case 'ctf_challenges':
-                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(author%20like%20%' . $search . '%)%20or%20(port%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(category%20like%20%' . $search . '%)%20or%20(difficulty%20like%20%' . $search . '%)%20or%20(points%20like%20%' . $search . '%)%20or%20(walkthrough%20like%20%' . $search . '%)%20or%20(flag%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
+                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/ctf_challenges?limit=25&filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(author%20like%20%' . $search . '%)%20or%20(port%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)%20or%20(category%20like%20%' . $search . '%)%20or%20(difficulty%20like%20%' . $search . '%)%20or%20(points%20like%20%' . $search . '%)%20or%20(walkthrough%20like%20%' . $search . '%)%20or%20(flag%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
                     $data = $this->getCtf_challenges($json);
                     break;
                 case 'malware':
-                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/malware?filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
+                    $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/malware?limit=25&filter=(_id%20like%20%' . $search . '%)%20or%20(name%20like%20%' . $search . '%)%20or%20(summary%20like%20%' . $search . '%)%20or%20(platform%20like%20%' . $search . '%)%20or%20(type%20like%20%' . $search . '%)&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
                     $data = $this->getMalware($json);
                     break;
                 default:
@@ -226,7 +226,7 @@ class Api {
         return $res;
     }
 
-    public function patch($data, $colletion) {
+    public function patch($data, $collection) {
 		$ch = curl_init();
         $options = array(CURLOPT_URL => 'http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'?filter=_id='.$_POST['_id'],
                          CURLOPT_HTTPHEADER => array('X-DreamFactory-API-Key:'.$this->ini_array["api_key"],

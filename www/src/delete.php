@@ -5,7 +5,13 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 $ini_array = parse_ini_file("../conf/phpconfig.ini", true);
 
-
+/**
+*
+*	Deletes both metadata document in MongoDB and file in Swift storage
+*	Does this by calling the delete function in the Api class and check
+*	what the response is.
+*
+**/
 $api = new Api($ini_array);
 $res = $api->delete($_GET['id'], $_GET['type']);
 $obj = json_decode($res['response'], true);
@@ -25,16 +31,17 @@ if ($res['response'] != FALSE) {
             'Key' => $res['file_path']
         ]);
     } catch (S3Exception $e) {
-        echo $e->getMessage() . PHP_EOL;
+        echo $e->getMessage() . PHP_EOL; // Not to be used in production
         $data['error'] = 's3Exeption';
         echo $twig->render('databaseManagementPage.html', $data); // Render html
     }
 }
 
-// TODO Find do error handling on response code.
+// If code is not 200, something went wrong
 if (!empty($obj['error']['code']) && ($obj['error']['code'] != 200) && (!$r['DeleteMarker'])) {
     $data['deleted'] = 'false';
 } else {
     $data['deleted'] = 'true';
 } 
+// Change header location to index.php
 header('Location: ../index.php?deleted=' . $data['deleted']);
