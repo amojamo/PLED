@@ -131,6 +131,33 @@ class Api {
         }
         return $data;
     }
+    public function createCollections($collections) {
+        //curl -X POST "https://10.212.138.13/api/v2/mongodb/_schema"{\"resource\":[{\"name\":\"test\"}]}"
+        foreach($collections as $collection) {        
+            if(!$this->collectionExists($collection)){
+                echo $collection; 
+                $ch = curl_init();
+                $json = '{}';
+                $resource = json_decode($json);
+                $resource->resource = [];
+                $col = json_decode($json);
+                $col->name = $collection;
+                $resource->resource[0] = $col;
+                $data = json_encode($resource, true);
+                $options = array(CURLOPT_URL => 'http://'.$this->ini_array["ip"].'/api/v2/mongodb/_schema',
+                                CURLOPT_HTTPHEADER => array('X-DreamFactory-API-Key:'.$this->ini_array["api_key"],
+                                'Content-Type: application/json'),
+                                CURLOPT_POST => 1,
+                                CURLOPT_POSTFIELDS => $data,
+                                CURLOPT_RETURNTRANSFER => 1
+                                );
+
+                curl_setopt_array($ch, $options);
+                // Send the request
+                curl_exec($ch);
+            }
+        }
+    }
     public function getContents($collection) {
         $data = [];
         if($this->collectionExists($collection)){

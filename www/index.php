@@ -7,9 +7,11 @@ use Aws\Exception\AwsException;
 $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
 $collections = array('vuln_applications', 'ctf_challenges', 'malware');
+$firsttime = false;
 
 if(isset($_POST['generateConfig'])) {
 	$ip = $_POST['apiurl'];
+	$firsttime = true;
 	$validated = aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ini_array['ip']);
 
 	if (!$validated){
@@ -25,9 +27,10 @@ if(isset($_POST['generateConfig'])) {
 			's3_secret = '.$_POST['s3secret'].PHP_EOL.
 			's3_region = '.$_POST['s3region'].PHP_EOL.
 			's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL.
-			'collections = '.'vuln_applications,ctf_challenges,malware'.PHP_EOL;
+			'collections = '.$_POST['collections'].PHP_EOL;
 	fwrite($file, $data);
 	fclose($file);
+
 	header("Location: index.php");
 
 	
@@ -62,8 +65,16 @@ if(isset($_GET['updated'])){
 if(isset($_GET['deleted'])) {
 	$data['deleted'] = $_GET['deleted'];
 }
+//Create Api object, parameter is the php config created during first time setup
 $api = new Api($ini_array);
+//Collections are separated by commas
 $collections = explode(',', $ini_array['collections']);
+
+//Only create collections if its the first time launching the page
+if ($firsttime)
+	$api->createCollections($collections);
+
+//For each collection, get data and render with Twig
 foreach($collections as $collection){
 	$data[$collection] = $api->getContents($collection);
 }
