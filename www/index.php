@@ -7,11 +7,10 @@ use Aws\Exception\AwsException;
 $loader = new Twig_Loader_Filesystem('views');
 $twig = new Twig_Environment($loader, array());
 $collections = array('vuln_applications', 'ctf_challenges', 'malware');
-$firsttime = false;
 
 if(isset($_POST['generateConfig'])) {
 	$ip = $_POST['apiurl'];
-	$firsttime = true;
+	$_SESSION['firsttime'] = true;
 	$validated = aunthenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $ini_array['ip']);
 
 	if (!$validated){
@@ -71,8 +70,11 @@ $api = new Api($ini_array);
 $collections = explode(',', $ini_array['collections']);
 
 //Only create collections if its the first time launching the page
-if ($firsttime)
+if ($_SESSION['firsttime']) {
 	$api->createCollections($collections);
+	$_SESSION['firsttime'] = false;
+}
+
 
 //For each collection, get data and render with Twig
 foreach($collections as $collection){
