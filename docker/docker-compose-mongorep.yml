@@ -5,8 +5,8 @@ services:
     image: 'bitnami/mongodb:latest'
     environment:
       - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_ROOT_PASSWORD=poot
-      - MONGODB_REPLICA_SET_KEY=replicapoot
+      - MONGODB_ROOT_PASSWORD=ROOT_PASSWORD
+      - MONGODB_REPLICA_SET_KEY=REPLICA_KEY
     volumes:
       - mongodb-master-data:/bitnami
     ports:
@@ -19,8 +19,8 @@ services:
     environment:
       - MONGODB_REPLICA_SET_MODE=secondary
       - MONGODB_PRIMARY_HOST=mongodb-primary
-      - MONGODB_PRIMARY_ROOT_PASSWORD=poot
-      - MONGODB_REPLICA_SET_KEY=replicapoot
+      - MONGODB_PRIMARY_ROOT_PASSWORD=ROOT_PASSWORD
+      - MONGODB_REPLICA_SET_KEY=REPLICA_KEY
       - MONGODB_PRIMARY_PORT_NUMBER=27017
 
   mongodb-arbiter:
@@ -30,18 +30,10 @@ services:
     environment:
       - MONGODB_REPLICA_SET_MODE=arbiter
       - MONGODB_PRIMARY_HOST=mongodb-primary
-      - MONGODB_PRIMARY_ROOT_PASSWORD=poot
-      - MONGODB_REPLICA_SET_KEY=replicapoot
+      - MONGODB_PRIMARY_ROOT_PASSWORD=ROOT_PASSWORD
+      - MONGODB_REPLICA_SET_KEY=REPLICA_KEY
       - MONGODB_PRIMARY_PORT_NUMBER=27017
 
-#   mongo-express:
-#     image: mongo-express
-#     ports:
-#       - 8082:8082
-#     environment:
-#       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-#       ME_CONFIG_MONGODB_ADMINPASSWORD: poot
-#
 volumes:
   mongodb-master-data:
     external:
