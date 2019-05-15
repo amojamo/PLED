@@ -35,7 +35,7 @@ if($_POST['upload_type'] == "vuln_application") {
 
 	$resource->resource[0] = $application_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('vuln_applications', $body, $ini_array["api_key"]);
+	sendPatchRequest('vuln_applications', $body, $ini_array);
 
 } else if ($_POST['upload_type'] == "ctf_challenge") {	
 	$resource = json_decode('{}');
@@ -54,7 +54,7 @@ if($_POST['upload_type'] == "vuln_application") {
 	
 	$resource->resource[0] = $challenge_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('ctf_challenges', $body, $ini_array["api_key"]);
+	sendPatchRequest('ctf_challenges', $body, $ini_array);
 
 } else if ($_POST['upload_type'] == "malware") {
 	$resource = json_decode('{}');
@@ -68,7 +68,7 @@ if($_POST['upload_type'] == "vuln_application") {
 
 	$resource->resource[0] = $malware_to_modify;
 	$body = json_encode($resource, true);
-	sendPatchRequest('malware', $body, $ini_array["api_key"]);
+	sendPatchRequest('malware', $body, $ini_array);
 
 } else {
 	// This should not happen
@@ -82,7 +82,7 @@ if($_POST['upload_type'] == "vuln_application") {
 *	@param $apikey - API key
 *
 **/
-function sendPatchRequest($collection, $body) {
+function sendPatchRequest($collection, $body, $ini_array) {
         $api = new Api($ini_array);
 		$res = $api->patch($body, 'vuln_applications');
 		$obj = json_decode($res['response'], true);
