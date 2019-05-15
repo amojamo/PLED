@@ -38,6 +38,7 @@ if(isset($_POST['generateConfig'])) {
 
 if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
 	$ini_array = parse_ini_file("./conf/phpconfig.ini", true);
+	$_SESSION['firsttime'] = false;
 } else {
 	echo $twig->render('generateConfig.html', array());
 	die();

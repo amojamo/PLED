@@ -31,7 +31,9 @@ class Api {
             if(isset($v['added_date'])) {
                 $data[$key]["added_date"] = $v['added_date'];
             }
-            $data[$key]["cve"] = $v['cve'];
+            if(isset($v['cve'])) {
+                $data[$key]["cve"] = $v['cve'];
+            }
             if(isset($v['cve_summary'])) {
                 $data[$key]["cve_summary"] = $v['cve_summary'];
             }

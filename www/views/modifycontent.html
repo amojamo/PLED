@@ -16,6 +16,7 @@
 			<b>CVE:</b> {{ res.cve }}<br>
 		</button>
 		<div class="content">
+			{% if res.exploitdb_id is null %}
 			<form id="formstyle" action="../src/modify.php" method="post" enctype="multipart/form-data">
 				<br><h5>Modify content of object #{{ res._id }} - {{ res.Upload_Type }}</h5><br>
 				<div class="grid">       
@@ -43,7 +44,7 @@
 						<fieldset>
 							<div class="select">
 								<select name="app_platform" id="app_platform_{{ res._id }}" class="dropdown" tabindex="5">
-									<option value="any">---</option>
+									<option value="any">---</option>$obj = json_decode($res['response'], true);
 									<option value="aix">AIX</option>
 									<option value="alpha">Alpha</option>
 									<option value="android">Android</option>
@@ -166,7 +167,7 @@
 				<fieldset>
 					<button name="submit" class="submit" type="submit" id="upload-submit" data-submit="...Uploading" tabindex="7">Submit changes to database</button>
 				</fieldset>
-
+			{% endif %}
 				<!-- DELETE BUTTON -->
 				<fieldset>
 					<button type="submit" tabindex="8" class="delete" data-confirm="Are you sure to delete this item?" formaction="../src/delete.php?id={{ res._id }}&type=vuln_applications">Delete object from database</button>
