@@ -88,7 +88,6 @@ else {
     **/
     $files = [];
     $content = file_get_contents($_FILES['challenge_fileToUpload']['tmp_name']);
-    //$filename = hash('md5', $_FILES['challenge_fileToUpload']['name'].date_timestamp_get(date_create()));
     $filename = uniqid().'_'.$_FILES['challenge_fileToUpload']['name'];
     array_push($files, $filename);
 
@@ -99,6 +98,7 @@ else {
             'Body' => $content
         ]);
 
+        /* API post request */
         $json = '{}';
         $resurce = json_decode($json);
         $resurce->resource = [];
@@ -133,7 +133,7 @@ else {
         $body = json_encode($resource, true);
         $res = $api->insert($body, 'ctf_challenges');   // call insert function in Api class
         $obj = json_decode($res['response'], true);
-        
+        // Check for errors
         if($res['response'] === FALSE){
             die($res['error']);
             $data['error'] = 'dferror';

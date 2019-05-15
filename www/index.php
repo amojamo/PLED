@@ -38,7 +38,6 @@ if(isset($_POST['generateConfig'])) {
 
 if (file_exists($_SERVER['DOCUMENT_ROOT']."/conf/phpconfig.ini")) {
 	$ini_array = parse_ini_file("./conf/phpconfig.ini", true);
-	$_SESSION['firsttime'] = false;
 } else {
 	echo $twig->render('generateConfig.html', array());
 	die();
@@ -70,11 +69,8 @@ if(isset($_GET['deleted'])) {
 $api = new Api($ini_array);
 //Collections are separated by commas
 $collections = explode(',', $ini_array['collections']);
-//Only create collections if its the first time launching the page
-if ($_SESSION['firsttime']) {
-	$api->createCollections($collections);
-	$_SESSION['firsttime'] = false;
-}
+//Create collections
+$api->createCollections($collections);
 
 //For each collection, get data and render with Twig
 foreach($collections as $collection){
