@@ -4,6 +4,7 @@ from urllib.request import urlopen
 from src.config import get_config
 
 def load_csv(sort):
+    #Switcher to convert text to index in array
     switcher = {
         'id': 0,
         'file': 1,
@@ -21,8 +22,9 @@ def load_csv(sort):
     csvData = csv.reader(codecs.iterdecode(response, 'utf-8'))
     #skip the headers
     next(csvData)
-    #Data is sorted by date which is row 4 (index start at 0)
+    #Data is sorted by date which is row 4
     #This way the updater can go by the latest added date
+    #Get the index from the key name
     csvData = sorted(csvData, key=lambda row: row[switcher.get(sort, 3)])
 
     return list(csvData)

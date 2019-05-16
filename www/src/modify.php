@@ -83,6 +83,8 @@ if($_POST['upload_type'] == "vuln_application") {
 *
 **/
 function sendPatchRequest($collection, $body, $ini_array) {
+
+		//call API with patch method
         $api = new Api($ini_array);
 		$res = $api->patch($body, $collection);
 		$obj = json_decode($res['response'], true);

@@ -9,10 +9,23 @@ class Api {
         $this->s3 = include $_SERVER['DOCUMENT_ROOT'].'/src/openstack/openstack.php';
     }
 
+/**
+*	Check if mongodb collection exists
+*
+*	@param $collection - what collection to check
+*
+**/
     private function collectionExists($collection) {    
             $headers = get_headers('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'?limit=4&order=_id%20DESC&api_key='.$this->ini_array["api_key"]);
             return stripos($headers[0], "200 OK")?true:false;
     }
+/**
+*	Format the data of vulnerable applications
+*
+*	@param $json - raw data to format
+*   @return $data - array of vulnerable applications
+*
+**/
     private function getVuln_applications($json) {
         $data = [];
         $obj = json_decode($json, true);
@@ -70,6 +83,13 @@ class Api {
         }
         return $data;
     }
+/**
+*	Format the data of ctf chalenges
+*
+*	@param $json - raw data to format
+*   @return $data - array of ctf challenges
+*
+**/
     private function getCtf_challenges($json) {
         $data = [];
         $obj = json_decode($json, true);
@@ -120,6 +140,13 @@ class Api {
         }
         return $data;
     }
+/**
+*	Format the data of malware
+*
+*	@param $json - raw data to format
+*   @return $data - array of malware
+*
+**/
     private function getMalware($json) {
         $data = [];
         $obj = json_decode($json, true);
@@ -149,6 +176,12 @@ class Api {
         }
         return $data;
     }
+/**
+*	Send request to API to create collections
+*
+*	@param $collections - array of collection names to create 
+*
+**/
     public function createCollections($collections) {
         //curl -X POST "https://10.212.138.13/api/v2/mongodb/_schema"{\"resource\":[{\"name\":\"test\"}]}"
         foreach($collections as $collection) {        
@@ -175,6 +208,13 @@ class Api {
             }
         }
     }
+/**
+*	Get all content from a collection from the API
+*
+*	@param $collection - name of collection to get contents of 
+*   @return $data - array of data for the collection
+*
+**/
     public function getContents($collection) {
         $data = [];
         if($this->collectionExists($collection)){
@@ -196,7 +236,14 @@ class Api {
         return $data;
         
     }
-
+/**
+*	Search the API for a specific keyword
+*
+*	@param $search - keyword to search for
+*	@param $collection - name of collection to search in
+*   @return $data - array of  search result
+*
+**/
     public function search($search, $collection) {
         $data = [];
         if($this->collectionExists($collection)){
@@ -220,6 +267,14 @@ class Api {
         return $data;
     }
 
+/**
+*	Add data to the database
+*
+*	@param $data - data to add, request body 
+*	@param $collection - collection to add data to
+*   @return $res - response from the request to check for errors
+*
+**/
     public function insert($data, $collection) {
         $ch = curl_init();
         $options = array(CURLOPT_URL => 'http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'/',
@@ -241,6 +296,14 @@ class Api {
         return $res;
     }
 
+/**
+*	Patch / Modify data in the database
+*
+*	@param $data - data to modify
+*	@param $collection - name of collection for document to modify
+*   @return $res - response to check for errors
+*
+**/
     public function patch($data, $collection) {
 		$ch = curl_init();
         $options = array(CURLOPT_URL => 'http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'?filter=_id='.$_POST['_id'],
@@ -260,7 +323,14 @@ class Api {
         }
         return $res;
     }
-
+/**
+*	Delete document from the database
+*
+*	@param $id - id of document to delete
+*	@param $collection - name of collection to delete from
+*   @return $res - response from curl to check for errors
+*
+**/
     public function delete($id, $collection) {
         $json = file_get_contents('http://'.$this->ini_array["ip"].'/api/v2/mongodb/_table/'.$collection.'/'.$id.'?fields=file_path&api_key='.$this->ini_array["api_key"]);
         $file_path = json_decode($json, true);

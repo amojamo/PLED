@@ -40,6 +40,7 @@ if(empty($_POST['search'])) {
 		if($_POST['from'] == "modify") {
 			$data['findres'] = [];
 			foreach($collections as $collection){
+				//Call search method in API
 				$data['findres'][$collection] = $api->search($search, $collection);
 			}
 
@@ -51,6 +52,7 @@ if(empty($_POST['search'])) {
 		if ($_POST['from'] == "search") {
 			$data['searchres'] = [];
 			foreach($collections as $collection){
+				//Call search method in API
 				$data['searchres'][$collection] = $api->search($search, $collection);
 			}
 

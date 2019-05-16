@@ -128,7 +128,7 @@ else {
 
         $resource->resource[0] = $challenge_to_add;
 
-
+        //Insert data with api method insert()
         $api = new Api($ini_array);
         $body = json_encode($resource, true);
         $res = $api->insert($body, 'ctf_challenges');   // call insert function in Api class

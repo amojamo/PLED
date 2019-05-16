@@ -12,6 +12,7 @@ $ini_array = parse_ini_file("../conf/phpconfig.ini", true);
 *	what the response is.
 *
 **/
+//Call the api with the delete method
 $api = new Api($ini_array);
 $res = $api->delete($_GET['id'], $_GET['type']);
 $obj = json_decode($res['response'], true);
