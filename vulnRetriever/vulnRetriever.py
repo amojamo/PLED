@@ -69,7 +69,7 @@ def log(text):
 	if LOG:
 		print(text)
 #Get CSV data from exploitdb git repo
-#To see the available data check the CSV url
+#to see the available data, check the CSV url.
 csvData = load_csv('date')
 if not EXPLOITID:
 	#Removing all data from before set startdate
@@ -90,7 +90,7 @@ counter = 0
 inserted = 0
 start_time = time.time()
 log('\nTime: ' + str(datetime.datetime.now()))
-#Updater to run on an interval to see if a new app has bimport codecseen added
+#Updater to run on an interval to see if a new app has been added
 #Checks the latest date in the database and compares with dates in the CSV data
 if UPDATER:
 	verbose('Running in update mode\n')
@@ -121,7 +121,7 @@ if UPDATER:
 		quit()
 		
 #If an id is added as argument
-#Scan just this exploit
+#scan just this exploit.
 elif EXPLOITID:
 	verbose('Scanning id: ' + EXPLOITID + '\n')
 	found = False
