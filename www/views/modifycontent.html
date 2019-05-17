@@ -464,7 +464,7 @@
 				$('#c_difficulty_{{ res._id }}').val('{{ res.difficulty }}');
 			{% endif %}
 		{% endfor %}
-		{% for res in findres.ctf_challenges %}
+		{% for res in findres.malware %}
 			{% if res.platform %}
 				$('#mw_platform_{{ res._id }}').val('{{ res.platform }}');
 			{% endif %}
