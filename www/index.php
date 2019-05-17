@@ -33,7 +33,7 @@ if(isset($_POST['generateConfig'])) {
 			's3_secret = '.$_POST['s3secret'].PHP_EOL.
 			's3_region = '.$_POST['s3region'].PHP_EOL.
 			's3_endpoint = '.$_POST['s3endpoint'].PHP_EOL.
-			'collections = '.$_POST['collections'].PHP_EOL;
+			'collections = vuln_applications,ctf_challenges,malware'.PHP_EOL;
 	fwrite($file, $data);
 	fclose($file);
 	//Redirect to the index
